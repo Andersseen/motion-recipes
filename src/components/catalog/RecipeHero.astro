@@ -1,0 +1,120 @@
+---
+---
+
+<section class="recipe-hero" aria-labelledby="hero-title">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="mr-container hero-content">
+    <p class="hero-eyebrow">Browser-native motion cookbook</p>
+    <h1 id="hero-title" class="hero-title">
+      <span class="mr-gradient-text">Motion Recipes</span>
+    </h1>
+    <p class="hero-subtitle">
+      A visual catalog of modern web animation patterns with live demos, source code
+      and step-by-step implementation recipes.
+    </p>
+    <div class="hero-actions">
+      <a href="/recipes/" class="hero-button hero-button-primary">Explore recipes</a>
+      <a href="https://github.com/andersseen/motion-recipes" class="hero-button hero-button-secondary">View source</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .recipe-hero {
+    position: relative;
+    padding-block: var(--mr-space-24) var(--mr-space-16);
+    overflow: hidden;
+    background: var(--mr-gradient-hero);
+  }
+
+  .hero-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139, 92, 246, 0.12), transparent);
+  }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    max-width: 800px;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: var(--mr-text-sm);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mr-accent-light);
+    margin-bottom: var(--mr-space-4);
+  }
+
+  .hero-title {
+    font-size: var(--mr-text-3xl);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: var(--mr-space-6);
+  }
+
+  .hero-subtitle {
+    font-size: var(--mr-text-lg);
+    color: var(--mr-text-secondary);
+    max-width: 64ch;
+    margin-inline: auto;
+    margin-bottom: var(--mr-space-10);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--mr-space-4);
+  }
+
+  .hero-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--mr-space-3) var(--mr-space-6);
+    font-size: var(--mr-text-base);
+    font-weight: 500;
+    border-radius: var(--mr-radius-full);
+    transition: transform var(--mr-duration-fast) var(--mr-ease-out),
+                box-shadow var(--mr-duration-fast) var(--mr-ease-out);
+  }
+
+  .hero-button:hover {
+    text-decoration: none;
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-button:hover {
+      transform: none;
+    }
+  }
+
+  .hero-button-primary {
+    color: white;
+    background: linear-gradient(135deg, var(--mr-accent), var(--mr-accent-light));
+    box-shadow: 0 8px 24px rgba(139, 92, 242, 0.3);
+  }
+
+  .hero-button-primary:hover {
+    box-shadow: 0 12px 32px rgba(139, 92, 242, 0.4);
+  }
+
+  .hero-button-secondary {
+    color: var(--mr-text-primary);
+    background: var(--mr-bg-surface);
+    border: 1px solid var(--mr-border-strong);
+  }
+
+  .hero-button-secondary:hover {
+    border-color: var(--mr-border-strong);
+    background: var(--mr-bg-elevated);
+  }
+</style>

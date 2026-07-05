@@ -1,0 +1,42 @@
+---
+export interface Props {
+  notes: string[];
+}
+
+const { notes } = Astro.props;
+---
+
+<section class="notes-section" aria-labelledby="a11y-title">
+  <h2 id="a11y-title" class="section-heading">Accessibility notes</h2>
+  <ul class="notes-list">
+    {notes.map((note) => (
+      <li>{note}</li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .notes-section {
+    margin-top: var(--mr-space-12);
+  }
+
+  .section-heading {
+    font-size: var(--mr-text-lg);
+    font-weight: 600;
+    margin-bottom: var(--mr-space-5);
+  }
+
+  .notes-list {
+    padding-left: var(--mr-space-5);
+    color: var(--mr-text-secondary);
+    line-height: 1.7;
+  }
+
+  .notes-list li {
+    margin-bottom: var(--mr-space-3);
+  }
+
+  .notes-list li::marker {
+    color: var(--mr-accent-light);
+  }
+</style>

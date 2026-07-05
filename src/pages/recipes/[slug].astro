@@ -1,0 +1,279 @@
+---
+import SiteLayout from '../../components/layout/SiteLayout.astro';
+import RecipeMeta from '../../components/catalog/RecipeMeta.astro';
+import CodeTabs from '../../components/catalog/CodeTabs.astro';
+import MarkdownContent from '../../components/catalog/MarkdownContent.astro';
+import AccessibilityNotes from '../../components/catalog/AccessibilityNotes.astro';
+import PerformanceNotes from '../../components/catalog/PerformanceNotes.astro';
+import BrowserSupport from '../../components/catalog/BrowserSupport.astro';
+
+import { recipes, getRecipeBySlug } from '../../data/recipes';
+import { getRecipeDetailsBySlug } from '../../data/recipe-details';
+
+import CardToModalDemo from '../../components/demos/CardToModalDemo.astro';
+import ScrollRevealDemo from '../../components/demos/ScrollRevealDemo.astro';
+import ViewTransitionTabsDemo from '../../components/demos/ViewTransitionTabsDemo.astro';
+import MagneticButtonDemo from '../../components/demos/MagneticButtonDemo.astro';
+import SpotlightCardDemo from '../../components/demos/SpotlightCardDemo.astro';
+import TextRevealDemo from '../../components/demos/TextRevealDemo.astro';
+
+export function getStaticPaths() {
+  return recipes.map((recipe) => ({ params: { slug: recipe.slug } }));
+}
+
+const { slug } = Astro.params;
+const recipe = getRecipeBySlug(slug);
+const details = getRecipeDetailsBySlug(slug);
+
+if (!recipe || !details) {
+  return new Response('Not found', { status: 404 });
+}
+
+const demoMap: Record<string, typeof CardToModalDemo> = {
+  'card-to-modal': CardToModalDemo,
+  'scroll-reveal': ScrollRevealDemo,
+  'view-transition-tabs': ViewTransitionTabsDemo,
+  'magnetic-button': MagneticButtonDemo,
+  'spotlight-card': SpotlightCardDemo,
+  'text-reveal': TextRevealDemo,
+};
+
+const DemoComponent = demoMap[slug] ?? CardToModalDemo;
+
+const sourceFiles = import.meta.glob<{ default: string }>('../../recipes/**/source.*', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+const recipeFiles = import.meta.glob<{ default: string }>('../../recipes/**/recipe.md', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+const html = sourceFiles[`../../recipes/${slug}/source.html`]?.default ?? '';
+const css = sourceFiles[`../../recipes/${slug}/source.css`]?.default ?? '';
+const ts = sourceFiles[`../../recipes/${slug}/source.ts`]?.default ?? '';
+const recipeMarkdown = recipeFiles[`../../recipes/${slug}/recipe.md`]?.default ?? '';
+
+const categoryLabels: Record<typeof recipe.category, string> = {
+  'shared-element': 'Shared Element',
+  'scroll-driven': 'Scroll Driven',
+  'view-transitions': 'View Transitions',
+  'microinteractions': 'Microinteractions',
+  'text-motion': 'Text Motion',
+  'layout-transitions': 'Layout Transitions',
+  'experimental': 'Experimental',
+};
+---
+
+<SiteLayout title={recipe.title} description={recipe.description}>
+  <article class="recipe-page">
+    <header class="recipe-header">
+      <div class="mr-container header-inner">
+        <a href="/recipes/" class="back-link">← All recipes</a>
+        <span class="mr-badge header-category">{categoryLabels[recipe.category]}</span>
+        <h1 class="recipe-title">{recipe.title}</h1>
+        <p class="recipe-description">{recipe.description}</p>
+      </div>
+    </header>
+
+    <section class="mr-section demo-section" aria-labelledby="demo-title">
+      <div class="mr-container">
+        <h2 id="demo-title" class="sr-only">Interactive demo</h2>
+        <div class="demo-stage">
+          <DemoComponent />
+        </div>
+      </div>
+    </section>
+
+    <div class="mr-section content-section">
+      <div class="mr-container content-grid">
+        <aside class="content-sidebar">
+          <RecipeMeta recipe={recipe} />
+        </aside>
+
+        <div class="content-body">
+          <section aria-labelledby="what-title">
+            <h2 id="what-title" class="section-title">What it does</h2>
+            <p class="section-text">{details.whatItDoes}</p>
+          </section>
+
+          <section class="two-columns" aria-labelledby="usage-title">
+            <div>
+              <h2 id="usage-title" class="section-title">When to use it</h2>
+              <ul class="section-list">
+                {details.whenToUse.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 class="section-title">When to avoid it</h2>
+              <ul class="section-list">
+                {details.whenToAvoid.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
+          <section aria-labelledby="how-title">
+            <h2 id="how-title" class="section-title">How it works</h2>
+            <MarkdownContent content={details.howItWorks} />
+          </section>
+
+          <section aria-labelledby="source-title">
+            <h2 id="source-title" class="section-title">Source code</h2>
+            <CodeTabs html={html} css={css} ts={ts} />
+          </section>
+
+          <section aria-labelledby="recipe-title">
+            <h2 id="recipe-title" class="section-title">Implementation recipe</h2>
+            <div class="recipe-panel">
+              <MarkdownContent content={recipeMarkdown} />
+            </div>
+          </section>
+
+          <AccessibilityNotes notes={details.accessibilityNotes} />
+          <PerformanceNotes notes={details.performanceNotes} />
+          <BrowserSupport apis={details.browserSupport} />
+        </div>
+      </div>
+    </div>
+  </article>
+</SiteLayout>
+
+<style>
+  .recipe-header {
+    padding-block: var(--mr-space-16) var(--mr-space-8);
+    background: var(--mr-gradient-hero);
+    border-bottom: 1px solid var(--mr-border);
+  }
+
+  .header-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--mr-space-4);
+  }
+
+  .back-link {
+    font-size: var(--mr-text-sm);
+    color: var(--mr-text-secondary);
+    margin-bottom: var(--mr-space-2);
+  }
+
+  .back-link:hover {
+    color: var(--mr-text-primary);
+  }
+
+  .header-category {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .recipe-title {
+    font-size: var(--mr-text-2xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+
+  .recipe-description {
+    font-size: var(--mr-text-lg);
+    color: var(--mr-text-secondary);
+    max-width: 70ch;
+  }
+
+  .demo-section {
+    padding-block: var(--mr-space-8);
+  }
+
+  .demo-stage {
+    min-height: 24rem;
+    padding: var(--mr-space-8);
+    background: var(--mr-bg-elevated);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-xl);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  .content-section {
+    padding-block: var(--mr-space-8) var(--mr-space-20);
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--mr-space-12);
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .content-sidebar {
+      order: -1;
+    }
+  }
+
+  .content-sidebar {
+    position: sticky;
+    top: calc(var(--mr-header-height) + var(--mr-space-6));
+  }
+
+  .content-body > section {
+    margin-bottom: var(--mr-space-12);
+  }
+
+  .section-title {
+    font-size: var(--mr-text-xl);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--mr-space-4);
+  }
+
+  .section-text {
+    color: var(--mr-text-secondary);
+    font-size: var(--mr-text-base);
+    line-height: 1.7;
+    max-width: 70ch;
+  }
+
+  .section-list {
+    padding-left: var(--mr-space-5);
+    color: var(--mr-text-secondary);
+    line-height: 1.7;
+  }
+
+  .section-list li {
+    margin-bottom: var(--mr-space-2);
+  }
+
+  .section-list li::marker {
+    color: var(--mr-accent-light);
+  }
+
+  .two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mr-space-8);
+  }
+
+  @media (max-width: 640px) {
+    .two-columns {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .recipe-panel {
+    padding: var(--mr-space-6);
+    background: var(--mr-bg-surface);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+  }
+</style>

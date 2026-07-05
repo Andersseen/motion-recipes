@@ -1,0 +1,73 @@
+:root {
+  color-scheme: dark;
+  --bg: #0a0a0b;
+  --surface: #16161a;
+  --border: rgba(255, 255, 255, 0.1);
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.scroll-container {
+  display: grid;
+  gap: 4rem;
+  padding: 80vh 1.5rem 80vh;
+}
+
+.reveal-section {
+  max-width: 640px;
+  margin-inline: auto;
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+
+  /* Modern path */
+  animation: reveal-enter both;
+  animation-timeline: view();
+  animation-range: entry 10% cover 30%;
+}
+
+@keyframes reveal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Fallback class set by JS when animation-timeline is unsupported */
+.reveal-section.is-hidden {
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(4px);
+  transition: opacity 500ms ease-out,
+              transform 500ms ease-out,
+              filter 500ms ease-out;
+}
+
+.reveal-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-section {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}

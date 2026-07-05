@@ -1,0 +1,59 @@
+---
+---
+
+<div class="text-reveal-demo" data-text-reveal-demo>
+  <p class="text-reveal" data-text-reveal>
+    Motion design should feel intentional, accessible and alive.
+  </p>
+</div>
+
+<script>
+  import { initTextReveal } from '../../scripts/text-reveal';
+
+  const demos = document.querySelectorAll<HTMLElement>('[data-text-reveal-demo]');
+  demos.forEach((demo) => initTextReveal(demo));
+</script>
+
+<style>
+  .text-reveal-demo {
+    width: 100%;
+    max-width: 560px;
+    text-align: center;
+  }
+
+  .text-reveal {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--mr-text-primary);
+  }
+
+  .text-reveal-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+
+  .text-reveal-inner {
+    display: inline-block;
+    transform: translateY(110%);
+    opacity: 0;
+    transition: transform 600ms var(--mr-ease-out),
+                opacity 500ms var(--mr-ease-out);
+    transition-delay: calc(var(--reveal-index, 0) * 80ms);
+  }
+
+  .text-reveal.is-revealed .text-reveal-inner {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .text-reveal-inner {
+      transform: none;
+      opacity: 1;
+      transition: none;
+    }
+  }
+</style>

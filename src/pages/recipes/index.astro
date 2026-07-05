@@ -1,0 +1,188 @@
+---
+import SiteLayout from '../../components/layout/SiteLayout.astro';
+import RecipeGrid from '../../components/catalog/RecipeGrid.astro';
+import { recipes, type RecipeCategory } from '../../data/recipes';
+
+const categories: { id: RecipeCategory | 'all'; label: string }[] = [
+  { id: 'all', label: 'All' },
+  { id: 'shared-element', label: 'Shared Element' },
+  { id: 'scroll-driven', label: 'Scroll Driven' },
+  { id: 'view-transitions', label: 'View Transitions' },
+  { id: 'microinteractions', label: 'Microinteractions' },
+  { id: 'text-motion', label: 'Text Motion' },
+  { id: 'layout-transitions', label: 'Layout Transitions' },
+  { id: 'experimental', label: 'Experimental' },
+];
+---
+
+<SiteLayout
+  title="Recipes"
+  description="Browse the full catalog of browser-native animation recipes."
+>
+  <section class="mr-section page-header">
+    <div class="mr-container">
+      <p class="page-eyebrow">Catalog</p>
+      <h1 class="page-title">All recipes</h1>
+      <p class="page-subtitle">
+        Every recipe includes a live demo, source code and a step-by-step implementation guide.
+      </p>
+    </div>
+  </section>
+
+  <section class="mr-section" aria-labelledby="recipes-title">
+    <div class="mr-container">
+      <div class="filter-bar" data-filter-bar>
+        <span class="filter-label">Filter:</span>
+        <div class="filter-buttons" role="group" aria-label="Filter recipes by category">
+          {categories.map((cat) => (
+            <button
+              type="button"
+              class="filter-button"
+              data-category={cat.id}
+              aria-pressed={cat.id === 'all' ? 'true' : 'false'}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <h2 id="recipes-title" class="sr-only">Recipe list</h2>
+      <RecipeGrid recipes={recipes} />
+
+      <p class="empty-state" data-empty-state hidden>
+        No recipes found for this category.
+      </p>
+    </div>
+  </section>
+</SiteLayout>
+
+<script>
+  const filterBar = document.querySelector<HTMLElement>('[data-filter-bar]');
+  const grid = document.querySelector('.recipe-grid');
+  const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
+
+  if (filterBar && grid && emptyState) {
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>('.recipe-card'));
+    const buttons = Array.from(filterBar.querySelectorAll<HTMLButtonElement>('[data-category]'));
+
+    const setActive = (activeId: string) => {
+      buttons.forEach((btn) => {
+        const isActive = btn.dataset.category === activeId;
+        btn.setAttribute('aria-pressed', String(isActive));
+        btn.classList.toggle('is-active', isActive);
+      });
+
+      const recipeMeta = (window as unknown as Record<string, unknown>).motionRecipesMeta as Record<string, { category: string }> | undefined;
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const link = card.querySelector<HTMLAnchorElement>('.card-link');
+        const href = link?.getAttribute('href') ?? '';
+        const slug = href.replace('/recipes/', '').replace('/', '');
+        const category = recipeMeta?.[slug]?.category ?? '';
+        const isMatch = activeId === 'all' || category === activeId;
+        card.closest('li')!.hidden = !isMatch;
+        if (isMatch) visibleCount++;
+      });
+
+      emptyState.hidden = visibleCount > 0;
+    };
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        setActive(btn.dataset.category ?? 'all');
+      });
+    });
+
+    // Initialize active state styling
+    setActive('all');
+  }
+</script>
+
+<script is:inline define:vars={{ meta: Object.fromEntries(recipes.map((r) => [r.slug, { category: r.category }])) }}>
+  window.motionRecipesMeta = meta;
+</script>
+
+<style>
+  .page-header {
+    padding-block: var(--mr-space-20) var(--mr-space-8);
+    background: var(--mr-gradient-hero);
+  }
+
+  .page-eyebrow {
+    font-size: var(--mr-text-sm);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mr-accent-light);
+    margin-bottom: var(--mr-space-3);
+  }
+
+  .page-title {
+    font-size: var(--mr-text-2xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: var(--mr-space-4);
+  }
+
+  .page-subtitle {
+    color: var(--mr-text-secondary);
+    max-width: 60ch;
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--mr-space-3);
+    margin-bottom: var(--mr-space-8);
+    padding: var(--mr-space-4);
+    background: var(--mr-bg-surface);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+  }
+
+  .filter-label {
+    font-size: var(--mr-text-sm);
+    font-weight: 500;
+    color: var(--mr-text-muted);
+  }
+
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--mr-space-2);
+  }
+
+  .filter-button {
+    padding: var(--mr-space-2) var(--mr-space-4);
+    font-size: var(--mr-text-sm);
+    font-weight: 500;
+    color: var(--mr-text-secondary);
+    border-radius: var(--mr-radius-full);
+    border: 1px solid transparent;
+    transition: background var(--mr-duration-fast) var(--mr-ease-out),
+                color var(--mr-duration-fast) var(--mr-ease-out);
+  }
+
+  .filter-button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--mr-text-primary);
+  }
+
+  .filter-button[aria-pressed='true'],
+  .filter-button.is-active {
+    color: var(--mr-text-primary);
+    background: rgba(139, 92, 246, 0.12);
+    border-color: rgba(139, 92, 246, 0.25);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--mr-space-12);
+    color: var(--mr-text-muted);
+    border: 1px dashed var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+  }
+</style>

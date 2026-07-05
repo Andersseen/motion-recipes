@@ -1,0 +1,153 @@
+---
+---
+
+<div class="scroll-reveal-demo" data-scroll-reveal>
+  <div class="sr-scroll-area">
+    <p class="sr-hint">Scroll down ↓</p>
+    {Array.from({ length: 6 }).map((_, i) => (
+      <div class="sr-item" data-reveal>
+        <span class="sr-number">0{i + 1}</span>
+        <div class="sr-content">
+          <h3 class="sr-title">Reveal item {i + 1}</h3>
+          <p class="sr-text">
+            This element fades up as it enters the viewport. The modern version uses
+            <code>animation-timeline: view()</code>; older browsers fall back to IntersectionObserver.
+          </p>
+        </div>
+      </div>
+    ))}
+    <div class="sr-spacer"></div>
+  </div>
+</div>
+
+<script>
+  import { initScrollReveal } from '../../scripts/scroll-reveal';
+
+  const demos = document.querySelectorAll<HTMLElement>('[data-scroll-reveal]');
+  demos.forEach((demo) => initScrollReveal(demo));
+</script>
+
+<style>
+  .scroll-reveal-demo {
+    width: 100%;
+    max-width: 520px;
+    height: 360px;
+    overflow-y: auto;
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+    background: var(--mr-bg-surface);
+  }
+
+  .sr-scroll-area {
+    padding: var(--mr-space-8) var(--mr-space-6);
+  }
+
+  .sr-hint {
+    text-align: center;
+    color: var(--mr-text-muted);
+    font-size: var(--mr-text-sm);
+    margin-bottom: var(--mr-space-6);
+  }
+
+  .sr-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--mr-space-4);
+    padding: var(--mr-space-5);
+    margin-bottom: var(--mr-space-4);
+    background: var(--mr-bg-elevated);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-md);
+
+    /* Modern scroll-driven animation */
+    animation: scroll-reveal-enter both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 30%;
+
+    /* Stagger via custom property handled by JS */
+    animation-delay: calc(var(--reveal-index, 0) * 60ms);
+  }
+
+  @keyframes scroll-reveal-enter {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+      filter: blur(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  .sr-number {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    font-size: var(--mr-text-xs);
+    font-weight: 600;
+    color: var(--mr-accent-light);
+    background: rgba(139, 92, 246, 0.12);
+    border-radius: var(--mr-radius-md);
+  }
+
+  .sr-title {
+    font-size: var(--mr-text-base);
+    font-weight: 600;
+    margin-bottom: var(--mr-space-1);
+  }
+
+  .sr-text {
+    font-size: var(--mr-text-sm);
+    color: var(--mr-text-secondary);
+    line-height: 1.5;
+  }
+
+  .sr-text code {
+    font-size: 0.85em;
+    color: var(--mr-accent-light);
+  }
+
+  .sr-spacer {
+    height: 80px;
+  }
+
+  /* Fallback state before IntersectionObserver reveals it */
+  .fallback-io .sr-item {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(4px);
+    transition: opacity 500ms var(--mr-ease-out),
+                transform 500ms var(--mr-ease-out),
+                filter 500ms var(--mr-ease-out);
+    animation: none;
+  }
+
+  .fallback-io .sr-item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+
+  /* Reduced motion */
+  .reduced-motion .sr-item,
+  .reduced-motion .fallback-io .sr-item {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none;
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sr-item {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      animation: none;
+    }
+  }
+</style>

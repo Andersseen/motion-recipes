@@ -1,17 +1,213 @@
 ---
+import SiteLayout from '../components/layout/SiteLayout.astro';
+import RecipeHero from '../components/catalog/RecipeHero.astro';
+import RecipeGrid from '../components/catalog/RecipeGrid.astro';
+import { recipes } from '../data/recipes';
 
+const featuredSlugs = new Set(['card-to-modal', 'scroll-reveal', 'view-transition-tabs']);
+const featured = recipes.filter((r) => featuredSlugs.has(r.slug));
+const latest = [...recipes].reverse();
+
+const categories = [
+  { id: 'shared-element', label: 'Shared Element', count: recipes.filter((r) => r.category === 'shared-element').length },
+  { id: 'scroll-driven', label: 'Scroll Driven', count: recipes.filter((r) => r.category === 'scroll-driven').length },
+  { id: 'view-transitions', label: 'View Transitions', count: recipes.filter((r) => r.category === 'view-transitions').length },
+  { id: 'microinteractions', label: 'Microinteractions', count: recipes.filter((r) => r.category === 'microinteractions').length },
+  { id: 'text-motion', label: 'Text Motion', count: recipes.filter((r) => r.category === 'text-motion').length },
+  { id: 'layout-transitions', label: 'Layout Transitions', count: recipes.filter((r) => r.category === 'layout-transitions').length },
+  { id: 'experimental', label: 'Experimental', count: recipes.filter((r) => r.category === 'experimental').length },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<SiteLayout title="Motion Recipes">
+  <RecipeHero />
+
+  <section class="mr-section" aria-labelledby="featured-title">
+    <div class="mr-container">
+      <h2 id="featured-title" class="mr-section-title">Featured recipes</h2>
+      <p class="mr-section-subtitle">
+        Start with these complete examples. Each one includes a live demo, source code and an
+        implementation recipe you can follow from scratch.
+      </p>
+      <RecipeGrid recipes={featured} />
+    </div>
+  </section>
+
+  <section class="mr-section categories-section" aria-labelledby="categories-title">
+    <div class="mr-container">
+      <h2 id="categories-title" class="mr-section-title">Categories</h2>
+      <p class="mr-section-subtitle">
+        Browse patterns by the technique they rely on. Every recipe is framework-agnostic and built
+        with native browser APIs.
+      </p>
+      <ul class="category-grid" role="list">
+        {categories.map((cat) => (
+          <li>
+            <a href={`/recipes/?category=${cat.id}`} class="category-card">
+              <span class="category-name">{cat.label}</span>
+              <span class="category-count">{cat.count} recipe{cat.count === 1 ? '' : 's'}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="mr-section" aria-labelledby="why-title">
+    <div class="mr-container why-grid">
+      <div class="why-block">
+        <h2 id="why-title" class="mr-section-title">Why browser-native motion?</h2>
+        <p class="mr-section-subtitle">
+          Modern CSS and JavaScript APIs can deliver fluid, GPU-friendly animation without heavy
+          libraries. Native motion tends to be smaller, more performant and easier to make
+          accessible.
+        </p>
+      </div>
+      <ul class="why-list" role="list">
+        <li><strong>No runtime dependency</strong> — use CSS, WAAPI and DOM measurements.</li>
+        <li><strong>Better performance</strong> — animate transform and opacity on the compositor.</li>
+        <li><strong>Accessible by default</strong> — respect prefers-reduced-motion and focus.</li>
+        <li><strong>Progressive enhancement</strong> — ship fallbacks for older browsers.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mr-section a11y-section" aria-labelledby="a11y-section-title">
+    <div class="mr-container a11y-grid">
+      <div class="a11y-block">
+        <h2 id="a11y-section-title" class="mr-section-title">Accessibility-first animation</h2>
+        <p class="mr-section-subtitle">
+          Motion should never block content or disorient users. Every recipe in this catalog checks
+          reduced motion, keeps keyboard navigation intact and documents focus behavior.
+        </p>
+      </div>
+      <div class="a11y-code">
+        <pre><code>@media (prefers-reduced-motion: reduce) &#123;
+  *, *::before, *::after &#123;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  &#125;
+&#125;</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="mr-section" aria-labelledby="latest-title">
+    <div class="mr-container">
+      <h2 id="latest-title" class="mr-section-title">Latest recipes</h2>
+      <RecipeGrid recipes={latest} />
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .categories-section {
+    background: var(--mr-bg-elevated);
+    border-block: 1px solid var(--mr-border);
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    gap: var(--mr-space-4);
+    list-style: none;
+    padding: 0;
+  }
+
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mr-space-1);
+    padding: var(--mr-space-5);
+    background: var(--mr-bg-surface);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+    transition: border-color var(--mr-duration-fast) var(--mr-ease-out),
+                transform var(--mr-duration-fast) var(--mr-ease-out);
+  }
+
+  .category-card:hover {
+    text-decoration: none;
+    border-color: var(--mr-border-strong);
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .category-card:hover {
+      transform: none;
+    }
+  }
+
+  .category-name {
+    font-weight: 600;
+    color: var(--mr-text-primary);
+  }
+
+  .category-count {
+    font-size: var(--mr-text-sm);
+    color: var(--mr-text-muted);
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mr-space-12);
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .why-grid {
+      grid-template-columns: 1fr;
+      gap: var(--mr-space-8);
+    }
+  }
+
+  .why-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--mr-space-4);
+  }
+
+  .why-list li {
+    padding: var(--mr-space-4);
+    background: var(--mr-bg-surface);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-md);
+    color: var(--mr-text-secondary);
+  }
+
+  .why-list strong {
+    color: var(--mr-text-primary);
+  }
+
+  .a11y-section {
+    background: var(--mr-bg-elevated);
+    border-block: 1px solid var(--mr-border);
+  }
+
+  .a11y-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mr-space-12);
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .a11y-grid {
+      grid-template-columns: 1fr;
+      gap: var(--mr-space-8);
+    }
+  }
+
+  .a11y-code pre {
+    padding: var(--mr-space-5);
+    background: var(--mr-bg-surface);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+    overflow-x: auto;
+    font-family: var(--mr-font-mono);
+    font-size: var(--mr-text-sm);
+    color: var(--mr-accent-light);
+  }
+</style>

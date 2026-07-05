@@ -1,0 +1,78 @@
+---
+export interface Props {
+  apis: { name: string; support: string; fallback: string }[];
+}
+
+const { apis } = Astro.props;
+---
+
+<section class="support-section" aria-labelledby="support-title">
+  <h2 id="support-title" class="section-heading">Browser support & fallbacks</h2>
+  <div class="support-table-wrapper">
+    <table class="support-table">
+      <thead>
+        <tr>
+          <th scope="col">API / Feature</th>
+          <th scope="col">Support</th>
+          <th scope="col">Fallback strategy</th>
+        </tr>
+      </thead>
+      <tbody>
+        {apis.map((api) => (
+          <tr>
+            <td><code>{api.name}</code></td>
+            <td>{api.support}</td>
+            <td>{api.fallback}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  .support-section {
+    margin-top: var(--mr-space-12);
+  }
+
+  .section-heading {
+    font-size: var(--mr-text-lg);
+    font-weight: 600;
+    margin-bottom: var(--mr-space-5);
+  }
+
+  .support-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+  }
+
+  .support-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--mr-text-sm);
+  }
+
+  .support-table th,
+  .support-table td {
+    padding: var(--mr-space-3) var(--mr-space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--mr-border);
+  }
+
+  .support-table th {
+    font-weight: 600;
+    color: var(--mr-text-secondary);
+    background: var(--mr-bg-elevated);
+  }
+
+  .support-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .support-table code {
+    font-family: var(--mr-font-mono);
+    font-size: 0.9em;
+    color: var(--mr-accent-light);
+  }
+</style>

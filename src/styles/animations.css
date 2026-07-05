@@ -1,0 +1,70 @@
+@keyframes mr-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mr-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mr-fade-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes mr-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.35);
+  }
+}
+
+@keyframes mr-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.mr-animate-fade-in {
+  animation: mr-fade-in var(--mr-duration-base) var(--mr-ease-out) forwards;
+}
+
+.mr-animate-fade-up {
+  animation: mr-fade-up var(--mr-duration-slow) var(--mr-ease-out) forwards;
+}
+
+.mr-animate-fade-scale {
+  animation: mr-fade-scale var(--mr-duration-slow) var(--mr-ease-out) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mr-animate-fade-in,
+  .mr-animate-fade-up,
+  .mr-animate-fade-scale {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

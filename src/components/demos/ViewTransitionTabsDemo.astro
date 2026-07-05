@@ -1,0 +1,169 @@
+---
+---
+
+<div class="view-transition-tabs-demo" data-view-transition-tabs>
+  <div class="vt-tabs" role="tablist" aria-label="Project sections">
+    <button
+      type="button"
+      class="vt-tab is-active"
+      role="tab"
+      aria-selected="true"
+      aria-controls="vt-panel-overview"
+      id="vt-tab-overview"
+      data-tab="overview"
+    >
+      Overview
+    </button>
+    <button
+      type="button"
+      class="vt-tab"
+      role="tab"
+      aria-selected="false"
+      aria-controls="vt-panel-analytics"
+      id="vt-tab-analytics"
+      data-tab="analytics"
+    >
+      Analytics
+    </button>
+    <button
+      type="button"
+      class="vt-tab"
+      role="tab"
+      aria-selected="false"
+      aria-controls="vt-panel-settings"
+      id="vt-tab-settings"
+      data-tab="settings"
+    >
+      Settings
+    </button>
+  </div>
+
+  <div class="vt-panels">
+    <section
+      class="vt-panel is-active"
+      role="tabpanel"
+      id="vt-panel-overview"
+      aria-labelledby="vt-tab-overview"
+      data-panel="overview"
+    >
+      <h3 class="vt-panel-title">Overview</h3>
+      <p class="vt-panel-text">
+        This tab panel uses the View Transitions API to cross-fade content. In unsupported browsers
+        it falls back to an instant switch.
+      </p>
+    </section>
+    <section
+      class="vt-panel"
+      role="tabpanel"
+      id="vt-panel-analytics"
+      aria-labelledby="vt-tab-analytics"
+      data-panel="analytics"
+      hidden
+    >
+      <h3 class="vt-panel-title">Analytics</h3>
+      <p class="vt-panel-text">
+        Metrics, charts and trends animate in together with the shared view transition, giving the
+        interface a cohesive feel.
+      </p>
+    </section>
+    <section
+      class="vt-panel"
+      role="tabpanel"
+      id="vt-panel-settings"
+      aria-labelledby="vt-tab-settings"
+      data-panel="settings"
+      hidden
+    >
+      <h3 class="vt-panel-title">Settings</h3>
+      <p class="vt-panel-text">
+        Preferences and configuration options appear with the same transition language, keeping the
+        experience predictable.
+      </p>
+    </section>
+  </div>
+</div>
+
+<script>
+  import { initViewTransitionTabs } from '../../scripts/view-transition-tabs';
+
+  const demos = document.querySelectorAll<HTMLElement>('[data-view-transition-tabs]');
+  demos.forEach((demo) => initViewTransitionTabs(demo));
+</script>
+
+<style>
+  .view-transition-tabs-demo {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .vt-tabs {
+    display: flex;
+    gap: var(--mr-space-1);
+    padding: var(--mr-space-1);
+    background: var(--mr-bg-elevated);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-full);
+    margin-bottom: var(--mr-space-6);
+  }
+
+  .vt-tab {
+    position: relative;
+    flex: 1;
+    padding: var(--mr-space-2) var(--mr-space-4);
+    font-size: var(--mr-text-sm);
+    font-weight: 500;
+    color: var(--mr-text-secondary);
+    border-radius: var(--mr-radius-full);
+    transition: color var(--mr-duration-fast) var(--mr-ease-out);
+  }
+
+  .vt-tab:hover {
+    color: var(--mr-text-primary);
+  }
+
+  .vt-tab.is-active {
+    color: var(--mr-text-primary);
+    background: rgba(139, 92, 246, 0.15);
+  }
+
+  .vt-panels {
+    position: relative;
+    min-height: 160px;
+    padding: var(--mr-space-6);
+    background: var(--mr-bg-elevated);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+  }
+
+  .vt-panel {
+    view-transition-name: vt-panel;
+  }
+
+  .vt-panel[hidden] {
+    display: none;
+  }
+
+  .vt-panel-title {
+    font-size: var(--mr-text-lg);
+    font-weight: 600;
+    margin-bottom: var(--mr-space-3);
+  }
+
+  .vt-panel-text {
+    color: var(--mr-text-secondary);
+    line-height: 1.6;
+  }
+
+  ::view-transition-old(vt-panel),
+  ::view-transition-new(vt-panel) {
+    animation-duration: 300ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(vt-panel),
+    ::view-transition-new(vt-panel) {
+      animation-duration: 0.01ms !important;
+    }
+  }
+</style>

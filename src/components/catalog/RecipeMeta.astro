@@ -1,0 +1,83 @@
+---
+import type { Recipe } from '../../data/recipes';
+
+export interface Props {
+  recipe: Recipe;
+}
+
+const { recipe } = Astro.props;
+
+const categoryLabels: Record<Recipe['category'], string> = {
+  'shared-element': 'Shared Element',
+  'scroll-driven': 'Scroll Driven',
+  'view-transitions': 'View Transitions',
+  'microinteractions': 'Microinteractions',
+  'text-motion': 'Text Motion',
+  'layout-transitions': 'Layout Transitions',
+  'experimental': 'Experimental',
+};
+
+const difficultyLabel = {
+  beginner: 'Beginner',
+  intermediate: 'Intermediate',
+  advanced: 'Advanced',
+} as const;
+---
+
+<div class="recipe-meta">
+  <div class="meta-row">
+    <span class="meta-label">Category</span>
+    <span class="mr-badge">{categoryLabels[recipe.category]}</span>
+  </div>
+  <div class="meta-row">
+    <span class="meta-label">Difficulty</span>
+    <span class="mr-badge">{difficultyLabel[recipe.difficulty]}</span>
+  </div>
+  <div class="meta-row">
+    <span class="meta-label">APIs</span>
+    <span class="meta-chips">
+      {recipe.APIs.map((api) => (
+        <span class="mr-chip">{api}</span>
+      ))}
+    </span>
+  </div>
+  <div class="meta-row">
+    <span class="meta-label">Motion</span>
+    <span class="meta-badges">
+      {recipe.hasReducedMotion && <span class="mr-badge">Reduced motion</span>}
+      {recipe.hasFallback && <span class="mr-badge">Fallback</span>}
+    </span>
+  </div>
+</div>
+
+<style>
+  .recipe-meta {
+    display: grid;
+    gap: var(--mr-space-4);
+    padding: var(--mr-space-5);
+    background: var(--mr-bg-surface);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--mr-space-3);
+  }
+
+  .meta-label {
+    min-width: 6rem;
+    font-size: var(--mr-text-sm);
+    font-weight: 500;
+    color: var(--mr-text-muted);
+  }
+
+  .meta-chips,
+  .meta-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--mr-space-2);
+  }
+</style>

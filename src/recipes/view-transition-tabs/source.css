@@ -1,0 +1,78 @@
+:root {
+  color-scheme: dark;
+  --bg: #0a0a0b;
+  --surface: #16161a;
+  --border: rgba(255, 255, 255, 0.1);
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+  --accent: #8b5cf6;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.tabs {
+  width: min(100% - 2rem, 480px);
+}
+
+.tablist {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  margin-bottom: 1.5rem;
+}
+
+.tab {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+}
+
+.tab.is-active {
+  color: var(--text);
+  background: rgba(139, 92, 246, 0.15);
+}
+
+.panels {
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+}
+
+.panel {
+  view-transition-name: tab-panel;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+::view-transition-old(tab-panel),
+::view-transition-new(tab-panel) {
+  animation-duration: 300ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(tab-panel),
+  ::view-transition-new(tab-panel) {
+    animation-duration: 0.01ms !important;
+  }
+}

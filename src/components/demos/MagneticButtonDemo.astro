@@ -1,0 +1,58 @@
+---
+---
+
+<div class="magnetic-button-demo" data-magnetic-button-demo>
+  <button type="button" class="magnetic-button" data-magnetic-button>
+    <span class="magnetic-button-text">Hover me</span>
+  </button>
+</div>
+
+<script>
+  import { initMagneticButton } from '../../scripts/magnetic-button';
+
+  const demos = document.querySelectorAll<HTMLElement>('[data-magnetic-button-demo]');
+  demos.forEach((demo) => initMagneticButton(demo));
+</script>
+
+<style>
+  .magnetic-button-demo {
+    display: grid;
+    place-items: center;
+    min-height: 180px;
+    width: 100%;
+  }
+
+  .magnetic-button {
+    --mx: 0px;
+    --my: 0px;
+
+    position: relative;
+    padding: var(--mr-space-4) var(--mr-space-8);
+    font-size: var(--mr-text-base);
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, var(--mr-accent), var(--mr-accent-light));
+    border-radius: var(--mr-radius-full);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+    transform: translate(var(--mx), var(--my));
+    transition: transform 150ms var(--mr-ease-out);
+    will-change: transform;
+  }
+
+  .magnetic-button:hover {
+    box-shadow: 0 12px 32px rgba(139, 92, 246, 0.4);
+  }
+
+  .magnetic-button-text {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .magnetic-button {
+      transform: none;
+      transition: none;
+    }
+  }
+</style>

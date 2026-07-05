@@ -1,0 +1,28 @@
+---
+import RecipeCard from './RecipeCard.astro';
+import type { Recipe } from '../../data/recipes';
+
+export interface Props {
+  recipes: Recipe[];
+}
+
+const { recipes } = Astro.props;
+---
+
+<ul class="recipe-grid" role="list">
+  {recipes.map((recipe) => (
+    <li>
+      <RecipeCard recipe={recipe} />
+    </li>
+  ))}
+</ul>
+
+<style>
+  .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: var(--mr-space-6);
+    list-style: none;
+    padding: 0;
+  }
+</style>

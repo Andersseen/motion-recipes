@@ -1,0 +1,119 @@
+---
+import CodeBlock from './CodeBlock.astro';
+
+export interface Props {
+  html: string;
+  css: string;
+  ts: string;
+}
+
+const { html, css, ts } = Astro.props;
+const tabs = [
+  { id: 'html', label: 'HTML', code: html, lang: 'html' as const },
+  { id: 'css', label: 'CSS', code: css, lang: 'css' as const },
+  { id: 'ts', label: 'TypeScript', code: ts, lang: 'ts' as const },
+];
+---
+
+<div class="code-tabs" data-code-tabs>
+  <div class="tab-list" role="tablist" aria-label="Source code">
+    {tabs.map((tab, index) => (
+      <button
+        type="button"
+        class="tab-button"
+        role="tab"
+        aria-selected={index === 0 ? 'true' : 'false'}
+        aria-controls={`panel-${tab.id}`}
+        id={`tab-${tab.id}`}
+        data-tab={tab.id}
+      >
+        {tab.label}
+      </button>
+    ))}
+  </div>
+  {tabs.map((tab, index) => (
+    <div
+      class="tab-panel"
+      role="tabpanel"
+      id={`panel-${tab.id}`}
+      aria-labelledby={`tab-${tab.id}`}
+      hidden={index !== 0}
+      data-panel={tab.id}
+    >
+      <CodeBlock code={tab.code} lang={tab.lang} />
+    </div>
+  ))}
+</div>
+
+<script>
+  const tabGroups = document.querySelectorAll<HTMLElement>('[data-code-tabs]');
+
+  tabGroups.forEach((group) => {
+    const buttons = Array.from(group.querySelectorAll<HTMLButtonElement>('[data-tab]'));
+    const panels = Array.from(group.querySelectorAll<HTMLElement>('[data-panel]'));
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const tabId = button.dataset.tab;
+
+        buttons.forEach((btn) => {
+          const isSelected = btn.dataset.tab === tabId;
+          btn.setAttribute('aria-selected', String(isSelected));
+        });
+
+        panels.forEach((panel) => {
+          const isActive = panel.dataset.panel === tabId;
+          panel.hidden = !isActive;
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  .code-tabs {
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+    overflow: hidden;
+    background: var(--mr-bg-surface);
+  }
+
+  .tab-list {
+    display: flex;
+    gap: var(--mr-space-1);
+    padding: var(--mr-space-2);
+    border-bottom: 1px solid var(--mr-border);
+    background: var(--mr-bg-elevated);
+  }
+
+  .tab-button {
+    padding: var(--mr-space-2) var(--mr-space-4);
+    font-size: var(--mr-text-sm);
+    font-weight: 500;
+    color: var(--mr-text-secondary);
+    border-radius: var(--mr-radius-md);
+    transition: background var(--mr-duration-fast) var(--mr-ease-out), color var(--mr-duration-fast) var(--mr-ease-out);
+  }
+
+  .tab-button:hover {
+    color: var(--mr-text-primary);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .tab-button[aria-selected='true'] {
+    color: var(--mr-text-primary);
+    background: rgba(139, 92, 246, 0.12);
+  }
+
+  .tab-panel {
+    padding: var(--mr-space-4);
+  }
+
+  .tab-panel[hidden] {
+    display: none;
+  }
+
+  .tab-panel :global(.code-block) {
+    border: none;
+  }
+</style>

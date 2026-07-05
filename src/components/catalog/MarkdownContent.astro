@@ -1,0 +1,89 @@
+---
+import { marked } from 'marked';
+
+export interface Props {
+  content: string;
+}
+
+const { content } = Astro.props;
+const html = marked.parse(content) as string;
+---
+
+<div class="markdown-content" set:html={html} />
+
+<style>
+  .markdown-content {
+    color: var(--mr-text-secondary);
+    font-size: var(--mr-text-base);
+    line-height: 1.7;
+  }
+
+  .markdown-content :global(h1),
+  .markdown-content :global(h2),
+  .markdown-content :global(h3) {
+    color: var(--mr-text-primary);
+    font-weight: 600;
+    margin-top: var(--mr-space-8);
+    margin-bottom: var(--mr-space-4);
+  }
+
+  .markdown-content :global(h1) {
+    font-size: var(--mr-text-xl);
+  }
+
+  .markdown-content :global(h2) {
+    font-size: var(--mr-text-lg);
+  }
+
+  .markdown-content :global(h3) {
+    font-size: var(--mr-text-base);
+  }
+
+  .markdown-content :global(p) {
+    margin-bottom: var(--mr-space-4);
+  }
+
+  .markdown-content :global(ul),
+  .markdown-content :global(ol) {
+    padding-left: var(--mr-space-6);
+    margin-bottom: var(--mr-space-4);
+  }
+
+  .markdown-content :global(li) {
+    margin-bottom: var(--mr-space-2);
+  }
+
+  .markdown-content :global(code) {
+    font-family: var(--mr-font-mono);
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--mr-bg-elevated);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-sm);
+    color: var(--mr-accent-light);
+  }
+
+  .markdown-content :global(pre) {
+    background: var(--mr-bg-elevated);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-md);
+    padding: var(--mr-space-4);
+    overflow-x: auto;
+    margin-bottom: var(--mr-space-4);
+  }
+
+  .markdown-content :global(pre code) {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  .markdown-content :global(a) {
+    color: var(--mr-accent-light);
+  }
+
+  .markdown-content :global(strong) {
+    color: var(--mr-text-primary);
+  }
+</style>

@@ -1,43 +1,66 @@
-# Astro Starter Kit: Minimal
+# Motion Recipes
 
-```sh
-pnpm create astro@latest -- --template minimal
-```
+> Beautiful web animation recipes, explained step by step.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+A visual catalog of browser-native UI animation patterns with live demos, source code, accessibility notes and implementation recipes.
 
-## 🚀 Project Structure
+## Stack
 
-Inside of your Astro project, you'll see the following folders and files:
+- [Astro](https://astro.build)
+- TypeScript
+- Modern CSS
+- Vanilla Web APIs
+
+## Project Structure
 
 ```text
 /
 ├── public/
 ├── src/
-│   └── pages/
-│       └── index.astro
+│   ├── components/
+│   │   ├── layout/      # SiteLayout, Header, Footer
+│   │   ├── catalog/     # RecipeCard, CodeTabs, BrowserSupport, etc.
+│   │   └── demos/       # Interactive demo components
+│   ├── data/
+│   │   └── recipes.ts   # Catalog metadata
+│   ├── pages/
+│   │   ├── index.astro
+│   │   └── recipes/
+│   │       ├── index.astro
+│   │       └── [slug].astro
+│   ├── recipes/
+│   │   └── {slug}/
+│   │       ├── source.html
+│   │       ├── source.css
+│   │       ├── source.ts
+│   │       └── recipe.md
+│   ├── scripts/
+│   │   └── {recipe}.ts
+│   └── styles/
+│       ├── tokens.css
+│       ├── global.css
+│       └── animations.css
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Commands
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+| Command        | Action                                      |
+| :------------- | :------------------------------------------ |
+| `pnpm install` | Installs dependencies                       |
+| `pnpm dev`     | Starts local dev server at `localhost:4321` |
+| `pnpm build`   | Build your production site to `./dist/`     |
+| `pnpm preview` | Preview your build locally                  |
+| `pnpm check`   | Run Astro type checks                       |
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Philosophy
 
-## 🧞 Commands
+This is not an installable library. It is a learning resource and visual cookbook. Each recipe can be copied, studied and adapted to any framework or vanilla project.
 
-All commands are run from the root of the project, from a terminal:
+## Adding a New Recipe
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. Add metadata to `src/data/recipes.ts`.
+2. Create a folder under `src/recipes/{slug}/` with `source.html`, `source.css`, `source.ts` and `recipe.md`.
+3. Create a demo component in `src/components/demos/`.
+4. Create the interactive script in `src/scripts/{recipe}.ts`.
+5. The dynamic route `src/pages/recipes/[slug].astro` will pick it up automatically.

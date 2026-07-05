@@ -1,0 +1,196 @@
+---
+---
+
+<div class="card-to-modal-demo" data-card-to-modal>
+  <article class="demo-card" data-card-trigger tabindex="0" role="button" aria-label="Open project details">
+    <div class="demo-card-image" aria-hidden="true"></div>
+    <div class="demo-card-body">
+      <span class="demo-card-tag">Case study</span>
+      <h3 class="demo-card-title">Aurora Dashboard</h3>
+      <p class="demo-card-text">
+        Click this card to see a shared-element expansion into a modal.
+      </p>
+    </div>
+  </article>
+</div>
+
+<script>
+  import { initCardToModal } from '../../scripts/card-to-modal';
+
+  const demos = document.querySelectorAll<HTMLElement>('[data-card-to-modal]');
+  demos.forEach((demo) => initCardToModal(demo));
+</script>
+
+<style>
+  .card-to-modal-demo {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .demo-card {
+    cursor: pointer;
+    background: var(--mr-bg-surface);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-xl);
+    overflow: hidden;
+    transition: border-color var(--mr-duration-fast) var(--mr-ease-out),
+                box-shadow var(--mr-duration-fast) var(--mr-ease-out);
+  }
+
+  .demo-card:hover {
+    border-color: var(--mr-border-strong);
+    box-shadow: var(--mr-shadow-md);
+  }
+
+  .demo-card:focus-visible {
+    outline: 2px solid var(--mr-accent-light);
+    outline-offset: 2px;
+  }
+
+  .demo-card-image {
+    height: 140px;
+    background: linear-gradient(135deg, #7c3aed, #3b82f6);
+  }
+
+  .demo-card-body {
+    padding: var(--mr-space-5);
+  }
+
+  .demo-card-tag {
+    display: inline-block;
+    font-size: var(--mr-text-xs);
+    font-weight: 500;
+    color: var(--mr-accent-light);
+    margin-bottom: var(--mr-space-2);
+  }
+
+  .demo-card-title {
+    font-size: var(--mr-text-lg);
+    font-weight: 600;
+    margin-bottom: var(--mr-space-2);
+  }
+
+  .demo-card-text {
+    font-size: var(--mr-text-sm);
+    color: var(--mr-text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Modal styles used by the injected DOM */
+  :global(.card-modal-root) {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+  }
+
+  :global(.card-modal-backdrop) {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(4px);
+  }
+
+  :global(.card-modal-shell) {
+    position: fixed;
+    background: var(--mr-bg-surface);
+    border: 1px solid var(--mr-border-strong);
+    border-radius: var(--mr-radius-xl);
+    box-shadow: var(--mr-shadow-lg);
+    overflow: hidden;
+    z-index: 1;
+    will-change: left, top, width, height;
+  }
+
+  :global(.card-modal-close) {
+    position: absolute;
+    top: var(--mr-space-3);
+    right: var(--mr-space-3);
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--mr-radius-full);
+    color: var(--mr-text-secondary);
+    background: var(--mr-bg-elevated);
+    border: 1px solid var(--mr-border);
+    z-index: 2;
+    transition: color var(--mr-duration-fast) var(--mr-ease-out),
+                background var(--mr-duration-fast) var(--mr-ease-out);
+  }
+
+  :global(.card-modal-close:hover) {
+    color: var(--mr-text-primary);
+    background: var(--mr-bg-surface);
+  }
+
+  :global(.card-modal-content) {
+    padding: var(--mr-space-8);
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  :global(.card-modal-tag) {
+    display: inline-block;
+    font-size: var(--mr-text-xs);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--mr-accent-light);
+    margin-bottom: var(--mr-space-3);
+  }
+
+  :global(.card-modal-title) {
+    font-size: var(--mr-text-2xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--mr-space-4);
+    outline: none;
+  }
+
+  :global(.card-modal-lead) {
+    font-size: var(--mr-text-lg);
+    color: var(--mr-text-secondary);
+    margin-bottom: var(--mr-space-4);
+  }
+
+  :global(.card-modal-content p) {
+    color: var(--mr-text-secondary);
+    margin-bottom: var(--mr-space-4);
+    line-height: 1.7;
+  }
+
+  :global(.card-modal-actions) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--mr-space-3);
+    margin-top: var(--mr-space-6);
+  }
+
+  :global(.card-modal-button) {
+    padding: var(--mr-space-3) var(--mr-space-5);
+    font-size: var(--mr-text-sm);
+    font-weight: 500;
+    color: white;
+    background: linear-gradient(135deg, var(--mr-accent), var(--mr-accent-light));
+    border-radius: var(--mr-radius-full);
+    transition: transform var(--mr-duration-fast) var(--mr-ease-out);
+  }
+
+  :global(.card-modal-button:hover) {
+    transform: translateY(-2px);
+  }
+
+  :global(.card-modal-button-ghost) {
+    color: var(--mr-text-primary);
+    background: transparent;
+    border: 1px solid var(--mr-border-strong);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.card-modal-button:hover) {
+      transform: none;
+    }
+  }
+</style>

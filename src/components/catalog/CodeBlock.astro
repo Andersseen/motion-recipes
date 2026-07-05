@@ -1,0 +1,47 @@
+---
+import { Code } from 'astro:components';
+
+export interface Props {
+  code: string;
+  lang: 'html' | 'css' | 'typescript' | 'javascript' | 'ts' | 'js';
+  filename?: string;
+}
+
+const { code, lang, filename } = Astro.props;
+const normalizedLang = lang === 'ts' ? 'typescript' : lang === 'js' ? 'javascript' : lang;
+---
+
+<div class="code-block">
+  {filename && <div class="code-filename">{filename}</div>}
+  <div class="code-scroll">
+    <Code code={code.trim()} lang={normalizedLang} theme="github-dark" />
+  </div>
+</div>
+
+<style>
+  .code-block {
+    background: var(--mr-bg-elevated);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-md);
+    overflow: hidden;
+  }
+
+  .code-filename {
+    padding: var(--mr-space-2) var(--mr-space-4);
+    font-size: var(--mr-text-xs);
+    font-family: var(--mr-font-mono);
+    color: var(--mr-text-muted);
+    border-bottom: 1px solid var(--mr-border);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .code-scroll {
+    overflow-x: auto;
+    padding: var(--mr-space-4);
+  }
+
+  .code-scroll :global(pre) {
+    margin: 0;
+    background: transparent !important;
+  }
+</style>
