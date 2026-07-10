@@ -13,8 +13,20 @@
       and step-by-step implementation recipes.
     </p>
     <div class="hero-actions">
-      <a href="/recipes/" class="hero-button hero-button-primary">Explore recipes</a>
-      <a href="https://github.com/andersseen/motion-recipes" class="hero-button hero-button-secondary">View source</a>
+      <and-button variant="default" size="lg" href="/recipes/">
+        Explore recipes
+        <and-icon slot="end" name="arrow-right" size="18"></and-icon>
+      </and-button>
+      <and-button
+        variant="outline"
+        size="lg"
+        href="https://github.com/andersseen/motion-recipes"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <and-icon slot="start" name="github" size="18"></and-icon>
+        View source
+      </and-button>
     </div>
   </div>
 </section>
@@ -72,49 +84,5 @@
     align-items: center;
     justify-content: center;
     gap: var(--mr-space-4);
-  }
-
-  .hero-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--mr-space-3) var(--mr-space-6);
-    font-size: var(--mr-text-base);
-    font-weight: 500;
-    border-radius: var(--mr-radius-full);
-    transition: transform var(--mr-duration-fast) var(--mr-ease-out),
-                box-shadow var(--mr-duration-fast) var(--mr-ease-out);
-  }
-
-  .hero-button:hover {
-    text-decoration: none;
-    transform: translateY(-2px);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero-button:hover {
-      transform: none;
-    }
-  }
-
-  .hero-button-primary {
-    color: white;
-    background: linear-gradient(135deg, var(--mr-accent), var(--mr-accent-light));
-    box-shadow: 0 8px 24px rgba(139, 92, 242, 0.3);
-  }
-
-  .hero-button-primary:hover {
-    box-shadow: 0 12px 32px rgba(139, 92, 242, 0.4);
-  }
-
-  .hero-button-secondary {
-    color: var(--mr-text-primary);
-    background: var(--mr-bg-surface);
-    border: 1px solid var(--mr-border-strong);
-  }
-
-  .hero-button-secondary:hover {
-    border-color: var(--mr-border-strong);
-    background: var(--mr-bg-elevated);
   }
 </style>

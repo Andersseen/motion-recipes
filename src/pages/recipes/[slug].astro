@@ -42,21 +42,21 @@ const demoMap: Record<string, typeof CardToModalDemo> = {
 
 const DemoComponent = demoMap[slug] ?? CardToModalDemo;
 
-const sourceFiles = import.meta.glob<{ default: string }>('../../recipes/**/source.*', {
+const sourceFiles = import.meta.glob<string>('../../recipes/**/source.*', {
   query: '?raw',
   import: 'default',
   eager: true,
 });
-const recipeFiles = import.meta.glob<{ default: string }>('../../recipes/**/recipe.md', {
+const recipeFiles = import.meta.glob<string>('../../recipes/**/recipe.md', {
   query: '?raw',
   import: 'default',
   eager: true,
 });
 
-const html = sourceFiles[`../../recipes/${slug}/source.html`]?.default ?? '';
-const css = sourceFiles[`../../recipes/${slug}/source.css`]?.default ?? '';
-const ts = sourceFiles[`../../recipes/${slug}/source.ts`]?.default ?? '';
-const recipeMarkdown = recipeFiles[`../../recipes/${slug}/recipe.md`]?.default ?? '';
+const html = sourceFiles[`../../recipes/${slug}/source.html`] ?? '';
+const css = sourceFiles[`../../recipes/${slug}/source.css`] ?? '';
+const ts = sourceFiles[`../../recipes/${slug}/source.ts`] ?? '';
+const recipeMarkdown = recipeFiles[`../../recipes/${slug}/recipe.md`] ?? '';
 
 const categoryLabels: Record<typeof recipe.category, string> = {
   'shared-element': 'Shared Element',
@@ -73,8 +73,12 @@ const categoryLabels: Record<typeof recipe.category, string> = {
   <article class="recipe-page">
     <header class="recipe-header">
       <div class="mr-container header-inner">
-        <a href="/recipes/" class="back-link">← All recipes</a>
-        <span class="mr-badge header-category">{categoryLabels[recipe.category]}</span>
+        <and-breadcrumb nav-label="Breadcrumb">
+          <and-breadcrumb-item href="/">Home</and-breadcrumb-item>
+          <and-breadcrumb-item href="/recipes/">Recipes</and-breadcrumb-item>
+          <and-breadcrumb-item current>{recipe.title}</and-breadcrumb-item>
+        </and-breadcrumb>
+        <and-badge variant="secondary" class="header-category">{categoryLabels[recipe.category]}</and-badge>
         <h1 class="recipe-title">{recipe.title}</h1>
         <p class="recipe-description">{recipe.description}</p>
       </div>
@@ -158,21 +162,6 @@ const categoryLabels: Record<typeof recipe.category, string> = {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--mr-space-4);
-  }
-
-  .back-link {
-    font-size: var(--mr-text-sm);
-    color: var(--mr-text-secondary);
-    margin-bottom: var(--mr-space-2);
-  }
-
-  .back-link:hover {
-    color: var(--mr-text-primary);
-  }
-
-  .header-category {
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
   }
 
   .recipe-title {

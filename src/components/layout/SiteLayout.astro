@@ -28,10 +28,10 @@ const pageTitle = title === 'Motion Recipes' ? title : `${title} · Motion Recip
     <title>{pageTitle}</title>
     <script>
       import '@andersseen/web-components/components/all';
-      import { registerIcons, COMPONENT_ICONS } from '@andersseen/icon';
+      import { registerAllIcons } from '@andersseen/icon';
       import { enableAnimations } from '@andersseen/web-components';
 
-      registerIcons(COMPONENT_ICONS);
+      registerAllIcons();
       enableAnimations();
     </script>
   </head>

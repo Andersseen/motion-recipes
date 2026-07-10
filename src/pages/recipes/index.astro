@@ -31,21 +31,22 @@ const categories: { id: RecipeCategory | 'all'; label: string }[] = [
 
   <section class="mr-section" aria-labelledby="recipes-title">
     <div class="mr-container">
-      <div class="filter-bar" data-filter-bar>
-        <span class="filter-label">Filter:</span>
-        <div class="filter-buttons" role="group" aria-label="Filter recipes by category">
-          {categories.map((cat) => (
-            <button
-              type="button"
-              class="filter-button"
-              data-category={cat.id}
-              aria-pressed={cat.id === 'all' ? 'true' : 'false'}
-            >
-              {cat.label}
-            </button>
-          ))}
+      <and-card variant="outline" padded class="filter-bar" data-filter-bar>
+        <div class="filter-inner">
+          <span class="filter-label">Filter:</span>
+          <div class="filter-buttons" role="group" aria-label="Filter recipes by category">
+            {categories.map((cat) => (
+              <and-button
+                variant={cat.id === 'all' ? 'default' : 'ghost'}
+                size="sm"
+                data-category={cat.id}
+              >
+                {cat.label}
+              </and-button>
+            ))}
+          </div>
         </div>
-      </div>
+      </and-card>
 
       <h2 id="recipes-title" class="sr-only">Recipe list</h2>
       <RecipeGrid recipes={recipes} />
@@ -63,26 +64,24 @@ const categories: { id: RecipeCategory | 'all'; label: string }[] = [
   const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
 
   if (filterBar && grid && emptyState) {
-    const cards = Array.from(grid.querySelectorAll<HTMLElement>('.recipe-card'));
-    const buttons = Array.from(filterBar.querySelectorAll<HTMLButtonElement>('[data-category]'));
+    const links = Array.from(grid.querySelectorAll<HTMLAnchorElement>('.card-link'));
+    const buttons = Array.from(filterBar.querySelectorAll<HTMLElement>('[data-category]'));
 
     const setActive = (activeId: string) => {
       buttons.forEach((btn) => {
         const isActive = btn.dataset.category === activeId;
-        btn.setAttribute('aria-pressed', String(isActive));
-        btn.classList.toggle('is-active', isActive);
+        btn.setAttribute('variant', isActive ? 'default' : 'ghost');
       });
 
       const recipeMeta = (window as unknown as Record<string, unknown>).motionRecipesMeta as Record<string, { category: string }> | undefined;
       let visibleCount = 0;
 
-      cards.forEach((card) => {
-        const link = card.querySelector<HTMLAnchorElement>('.card-link');
-        const href = link?.getAttribute('href') ?? '';
+      links.forEach((link) => {
+        const href = link.getAttribute('href') ?? '';
         const slug = href.replace('/recipes/', '').replace('/', '');
         const category = recipeMeta?.[slug]?.category ?? '';
         const isMatch = activeId === 'all' || category === activeId;
-        card.closest('li')!.hidden = !isMatch;
+        link.closest('li')!.hidden = !isMatch;
         if (isMatch) visibleCount++;
       });
 
@@ -90,7 +89,7 @@ const categories: { id: RecipeCategory | 'all'; label: string }[] = [
     };
 
     buttons.forEach((btn) => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('andButtonClick', () => {
         setActive(btn.dataset.category ?? 'all');
       });
     });
@@ -132,15 +131,15 @@ const categories: { id: RecipeCategory | 'all'; label: string }[] = [
   }
 
   .filter-bar {
+    display: block;
+    margin-bottom: var(--mr-space-8);
+  }
+
+  .filter-inner {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--mr-space-3);
-    margin-bottom: var(--mr-space-8);
-    padding: var(--mr-space-4);
-    background: var(--mr-bg-surface);
-    border: 1px solid var(--mr-border);
-    border-radius: var(--mr-radius-lg);
   }
 
   .filter-label {
@@ -153,29 +152,6 @@ const categories: { id: RecipeCategory | 'all'; label: string }[] = [
     display: flex;
     flex-wrap: wrap;
     gap: var(--mr-space-2);
-  }
-
-  .filter-button {
-    padding: var(--mr-space-2) var(--mr-space-4);
-    font-size: var(--mr-text-sm);
-    font-weight: 500;
-    color: var(--mr-text-secondary);
-    border-radius: var(--mr-radius-full);
-    border: 1px solid transparent;
-    transition: background var(--mr-duration-fast) var(--mr-ease-out),
-                color var(--mr-duration-fast) var(--mr-ease-out);
-  }
-
-  .filter-button:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--mr-text-primary);
-  }
-
-  .filter-button[aria-pressed='true'],
-  .filter-button.is-active {
-    color: var(--mr-text-primary);
-    background: rgba(139, 92, 246, 0.12);
-    border-color: rgba(139, 92, 246, 0.25);
   }
 
   .empty-state {

@@ -24,40 +24,38 @@ const difficultyLabel = {
 } as const;
 ---
 
-<div class="recipe-meta">
-  <div class="meta-row">
-    <span class="meta-label">Category</span>
-    <span class="mr-badge">{categoryLabels[recipe.category]}</span>
+<and-card variant="outline" padded>
+  <div class="recipe-meta">
+    <div class="meta-row">
+      <span class="meta-label">Category</span>
+      <and-badge variant="secondary">{categoryLabels[recipe.category]}</and-badge>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Difficulty</span>
+      <and-badge variant="secondary">{difficultyLabel[recipe.difficulty]}</and-badge>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">APIs</span>
+      <span class="meta-chips">
+        {recipe.APIs.map((api) => (
+          <and-badge variant="outline">{api}</and-badge>
+        ))}
+      </span>
+    </div>
+    <div class="meta-row">
+      <span class="meta-label">Motion</span>
+      <span class="meta-badges">
+        {recipe.hasReducedMotion && <and-badge>Reduced motion</and-badge>}
+        {recipe.hasFallback && <and-badge>Fallback</and-badge>}
+      </span>
+    </div>
   </div>
-  <div class="meta-row">
-    <span class="meta-label">Difficulty</span>
-    <span class="mr-badge">{difficultyLabel[recipe.difficulty]}</span>
-  </div>
-  <div class="meta-row">
-    <span class="meta-label">APIs</span>
-    <span class="meta-chips">
-      {recipe.APIs.map((api) => (
-        <span class="mr-chip">{api}</span>
-      ))}
-    </span>
-  </div>
-  <div class="meta-row">
-    <span class="meta-label">Motion</span>
-    <span class="meta-badges">
-      {recipe.hasReducedMotion && <span class="mr-badge">Reduced motion</span>}
-      {recipe.hasFallback && <span class="mr-badge">Fallback</span>}
-    </span>
-  </div>
-</div>
+</and-card>
 
 <style>
   .recipe-meta {
     display: grid;
     gap: var(--mr-space-4);
-    padding: var(--mr-space-5);
-    background: var(--mr-bg-surface);
-    border: 1px solid var(--mr-border);
-    border-radius: var(--mr-radius-lg);
   }
 
   .meta-row {
