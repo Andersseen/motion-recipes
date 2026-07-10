@@ -1,83 +1,42 @@
 ---
-const nav = [
-  { label: 'Recipes', href: '/recipes/' },
-  { label: 'About', href: '/#about' },
+const navItems = [
+  { id: 'recipes', label: 'Recipes', href: '/recipes/' },
+  { id: 'about', label: 'About', href: '/#about' },
 ];
+
+const activeItem = Astro.url.pathname.startsWith('/recipes') ? 'recipes' : '';
 ---
 
-<header class="site-header mr-glass">
-  <div class="mr-container header-inner">
-    <a href="/" class="logo" aria-label="Motion Recipes home">
-      <span class="logo-mark" aria-hidden="true"></span>
-      <span class="logo-text">Motion Recipes</span>
-    </a>
-    <nav aria-label="Primary">
-      <ul class="nav-list">
-        {nav.map((item) => (
-          <li>
-            <a href={item.href} class="nav-link">{item.label}</a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  </div>
-</header>
+<and-navbar
+  id="main-nav"
+  variant="glass"
+  position="sticky"
+  item-variant="default"
+  active-item={activeItem}
+  aria-label="Primary"
+>
+  <a
+    slot="brand"
+    href="/"
+    class="text-fg inline-flex items-center gap-3 font-semibold no-underline hover:no-underline text-[length:var(--mr-text-lg)]"
+    aria-label="Motion Recipes home"
+  >
+    <span
+      class="h-7 w-7 rounded-md bg-[linear-gradient(135deg,var(--mr-accent),var(--mr-accent-light))] shadow-[0_0_16px_var(--mr-accent-glow)]"
+      aria-hidden="true"
+    ></span>
+    <span>Motion Recipes</span>
+  </a>
+</and-navbar>
 
-<style>
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 1px solid var(--mr-border);
-  }
-
-  .header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: var(--mr-header-height);
-  }
-
-  .logo {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--mr-space-3);
-    font-weight: 600;
-    font-size: var(--mr-text-lg);
-    color: var(--mr-text-primary);
-    text-decoration: none;
-  }
-
-  .logo:hover {
-    text-decoration: none;
-  }
-
-  .logo-mark {
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: var(--mr-radius-md);
-    background: linear-gradient(135deg, var(--mr-accent), var(--mr-accent-light));
-    box-shadow: 0 0 16px var(--mr-accent-glow);
-  }
-
-  .nav-list {
-    display: flex;
-    align-items: center;
-    gap: var(--mr-space-6);
-    list-style: none;
-    padding: 0;
-  }
-
-  .nav-link {
-    color: var(--mr-text-secondary);
-    font-size: var(--mr-text-sm);
-    font-weight: 500;
-    padding: var(--mr-space-2) 0;
-    transition: color var(--mr-duration-fast) var(--mr-ease-out);
-  }
-
-  .nav-link:hover {
-    color: var(--mr-text-primary);
-    text-decoration: none;
-  }
-</style>
+<script is:inline define:vars={{ navItems, activeItem }}>
+  customElements.whenDefined('and-navbar').then(() => {
+    const nav = document.getElementById('main-nav');
+    nav.items = navItems;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        nav.activeItem = activeItem;
+      });
+    });
+  });
+</script>

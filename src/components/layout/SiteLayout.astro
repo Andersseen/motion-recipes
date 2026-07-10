@@ -26,6 +26,14 @@ const pageTitle = title === 'Motion Recipes' ? title : `${title} · Motion Recip
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
+    <script>
+      import '@andersseen/web-components/components/all';
+      import { registerIcons, COMPONENT_ICONS } from '@andersseen/icon';
+      import { enableAnimations } from '@andersseen/web-components';
+
+      registerIcons(COMPONENT_ICONS);
+      enableAnimations();
+    </script>
   </head>
   <body>
     <div class="site-root">
@@ -35,14 +43,6 @@ const pageTitle = title === 'Motion Recipes' ? title : `${title} · Motion Recip
       </main>
       <Footer />
     </div>
-    <script>
-      import '@andersseen/web-components/components/all';
-      import { registerIcons, COMPONENT_ICONS } from '@andersseen/icon';
-      import { enableAnimations } from '@andersseen/web-components';
-
-      registerIcons(COMPONENT_ICONS);
-      enableAnimations();
-    </script>
   </body>
 </html>
 

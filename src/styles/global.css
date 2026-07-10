@@ -1,4 +1,36 @@
+@import 'tailwindcss';
 @import './tokens.css';
+
+@theme {
+  --color-bg: var(--mr-bg);
+  --color-bg-elevated: var(--mr-bg-elevated);
+  --color-bg-surface: var(--mr-bg-surface);
+  --color-bg-glass: var(--mr-bg-glass);
+
+  --color-fg: var(--mr-text-primary);
+  --color-fg-secondary: var(--mr-text-secondary);
+  --color-fg-muted: var(--mr-text-muted);
+
+  --color-border: var(--mr-border);
+  --color-border-strong: var(--mr-border-strong);
+
+  --color-accent: var(--mr-accent);
+  --color-accent-light: var(--mr-accent-light);
+
+  --color-success: var(--mr-success);
+  --color-warning: var(--mr-warning);
+  --color-error: var(--mr-error);
+  --color-info: var(--mr-info);
+
+  --radius-sm: var(--mr-radius-sm);
+  --radius-md: var(--mr-radius-md);
+  --radius-lg: var(--mr-radius-lg);
+  --radius-xl: var(--mr-radius-xl);
+  --radius-full: var(--mr-radius-full);
+
+  --font-sans: var(--mr-font-sans);
+  --font-mono: var(--mr-font-mono);
+}
 
 *,
 *::before,
@@ -90,71 +122,40 @@ button {
   border: 0;
 }
 
-/* Layout utilities */
+/* Layout utilities — composed from Tailwind primitives via @apply */
 .mr-container {
-  width: min(100% - var(--mr-space-8), var(--mr-max-width));
-  margin-inline: auto;
+  @apply mx-auto w-[min(100%-var(--mr-space-8),var(--mr-max-width))];
 }
 
 .mr-section {
-  padding-block: var(--mr-space-16);
+  @apply py-16;
 }
 
 .mr-section-title {
-  font-size: var(--mr-text-xl);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  margin-bottom: var(--mr-space-6);
+  @apply mb-6 font-semibold tracking-[-0.02em] text-[length:var(--mr-text-xl)];
 }
 
 .mr-section-subtitle {
-  color: var(--mr-text-secondary);
-  font-size: var(--mr-text-base);
-  max-width: 60ch;
-  margin-bottom: var(--mr-space-10);
+  @apply text-fg-secondary mb-10 max-w-[60ch] text-[length:var(--mr-text-base)];
 }
 
 .mr-surface {
-  background: var(--mr-bg-surface);
-  border: 1px solid var(--mr-border);
-  border-radius: var(--mr-radius-lg);
+  @apply bg-bg-surface border-border rounded-lg border;
 }
 
 .mr-glass {
-  background: var(--mr-bg-glass);
-  border: 1px solid var(--mr-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  @apply bg-bg-glass border-border border backdrop-blur-[16px];
 }
 
 .mr-gradient-text {
-  background: linear-gradient(135deg, var(--mr-text-primary) 0%, var(--mr-accent-light) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
+  @apply bg-clip-text text-transparent bg-[linear-gradient(135deg,var(--mr-text-primary)_0%,var(--mr-accent-light)_100%)];
   -webkit-text-fill-color: transparent;
 }
 
 .mr-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--mr-space-2);
-  padding: var(--mr-space-1) var(--mr-space-3);
-  font-size: var(--mr-text-xs);
-  font-weight: 500;
-  border-radius: var(--mr-radius-full);
-  border: 1px solid var(--mr-border);
-  color: var(--mr-text-secondary);
-  background: var(--mr-bg-elevated);
+  @apply text-fg-secondary bg-bg-elevated border-border inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[length:var(--mr-text-xs)] font-medium;
 }
 
 .mr-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--mr-space-1) var(--mr-space-2);
-  font-size: var(--mr-text-xs);
-  font-weight: 500;
-  border-radius: var(--mr-radius-sm);
-  background: rgba(139, 92, 246, 0.12);
-  color: var(--mr-accent-light);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  @apply text-accent-light inline-flex items-center rounded-sm border bg-[rgba(139,92,246,0.12)] border-[rgba(139,92,246,0.2)] px-2 py-1 text-[length:var(--mr-text-xs)] font-medium;
 }
