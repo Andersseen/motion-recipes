@@ -12,14 +12,27 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "astro"
+    "validate": "pnpm check && pnpm test && pnpm test:e2e && pnpm build",
+    "deploy": "gh workflow run deploy.yml --ref main",
+    "astro": "astro",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@andersseen/icon": "^0.0.3",
+    "@andersseen/layout": "^0.0.1",
+    "@andersseen/web-components": "^0.1.0",
     "astro": "^7.0.6",
     "marked": "^15.0.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
-    "typescript": "^5.7.0"
+    "@playwright/test": "1.61.1",
+    "@tailwindcss/vite": "^4.3.2",
+    "jsdom": "^29.1.1",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.10"
   }
 }

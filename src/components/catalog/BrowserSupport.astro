@@ -7,27 +7,38 @@ const { apis } = Astro.props;
 ---
 
 <section class="support-section" aria-labelledby="support-title">
-  <h2 id="support-title" class="section-heading">Browser support & fallbacks</h2>
-  <div class="support-table-wrapper">
-    <table class="support-table">
-      <thead>
-        <tr>
-          <th scope="col">API / Feature</th>
-          <th scope="col">Support</th>
-          <th scope="col">Fallback strategy</th>
-        </tr>
-      </thead>
-      <tbody>
-        {apis.map((api) => (
-          <tr>
-            <td><code>{api.name}</code></td>
-            <td>{api.support}</td>
-            <td>{api.fallback}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+  <and-card variant="outline" padded>
+    <and-card-header>
+      <and-card-title>
+        <span class="support-title-inner" id="support-title">
+          <and-icon name="layers" size="18"></and-icon>
+          Browser support &amp; fallbacks
+        </span>
+      </and-card-title>
+    </and-card-header>
+    <and-card-content>
+      <div class="support-table-wrapper">
+        <table class="support-table">
+          <thead>
+            <tr>
+              <th scope="col">API / Feature</th>
+              <th scope="col">Support</th>
+              <th scope="col">Fallback strategy</th>
+            </tr>
+          </thead>
+          <tbody>
+            {apis.map((api) => (
+              <tr>
+                <td><code>{api.name}</code></td>
+                <td>{api.support}</td>
+                <td>{api.fallback}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </and-card-content>
+  </and-card>
 </section>
 
 <style>
@@ -35,16 +46,15 @@ const { apis } = Astro.props;
     margin-top: var(--mr-space-12);
   }
 
-  .section-heading {
-    font-size: var(--mr-text-lg);
-    font-weight: 600;
-    margin-bottom: var(--mr-space-5);
+  .support-title-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--mr-space-2);
+    color: var(--mr-accent-light);
   }
 
   .support-table-wrapper {
     overflow-x: auto;
-    border: 1px solid var(--mr-border);
-    border-radius: var(--mr-radius-lg);
   }
 
   .support-table {

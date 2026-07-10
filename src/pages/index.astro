@@ -7,6 +7,7 @@ import { recipes } from '../data/recipes';
 const featuredSlugs = new Set(['card-to-modal', 'scroll-reveal', 'view-transition-tabs']);
 const featured = recipes.filter((r) => featuredSlugs.has(r.slug));
 const latest = [...recipes].reverse();
+const base = import.meta.env.BASE_URL;
 
 const categories = [
   { id: 'shared-element', label: 'Shared Element', count: recipes.filter((r) => r.category === 'shared-element').length },
@@ -17,6 +18,20 @@ const categories = [
   { id: 'layout-transitions', label: 'Layout Transitions', count: recipes.filter((r) => r.category === 'layout-transitions').length },
   { id: 'experimental', label: 'Experimental', count: recipes.filter((r) => r.category === 'experimental').length },
 ];
+
+const whyPoints = [
+  { title: 'No runtime dependency', body: 'use CSS, WAAPI and DOM measurements.' },
+  { title: 'Better performance', body: 'animate transform and opacity on the compositor.' },
+  { title: 'Accessible by default', body: 'respect prefers-reduced-motion and focus.' },
+  { title: 'Progressive enhancement', body: 'ship fallbacks for older browsers.' },
+];
+
+const reducedMotionSnippet = `@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}`;
 ---
 
 <SiteLayout title="Motion Recipes">
@@ -43,9 +58,11 @@ const categories = [
       <ul class="category-grid" role="list">
         {categories.map((cat) => (
           <li>
-            <a href={`/recipes/?category=${cat.id}`} class="category-card">
-              <span class="category-name">{cat.label}</span>
-              <span class="category-count">{cat.count} recipe{cat.count === 1 ? '' : 's'}</span>
+            <a href={`${base}recipes/?category=${cat.id}`} class="category-card">
+              <and-card variant="outline" padded>
+                <span class="category-name">{cat.label}</span>
+                <span class="category-count">{cat.count} recipe{cat.count === 1 ? '' : 's'}</span>
+              </and-card>
             </a>
           </li>
         ))}
@@ -64,10 +81,13 @@ const categories = [
         </p>
       </div>
       <ul class="why-list" role="list">
-        <li><strong>No runtime dependency</strong> — use CSS, WAAPI and DOM measurements.</li>
-        <li><strong>Better performance</strong> — animate transform and opacity on the compositor.</li>
-        <li><strong>Accessible by default</strong> — respect prefers-reduced-motion and focus.</li>
-        <li><strong>Progressive enhancement</strong> — ship fallbacks for older browsers.</li>
+        {whyPoints.map((point) => (
+          <li>
+            <and-card variant="outline" padded>
+              <strong>{point.title}</strong> — {point.body}
+            </and-card>
+          </li>
+        ))}
       </ul>
     </div>
   </section>
@@ -82,12 +102,7 @@ const categories = [
         </p>
       </div>
       <div class="a11y-code">
-        <pre><code>@media (prefers-reduced-motion: reduce) &#123;
-  *, *::before, *::after &#123;
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  &#125;
-&#125;</code></pre>
+        <and-code value={reducedMotionSnippet}></and-code>
       </div>
     </div>
   </section>
@@ -115,20 +130,14 @@ const categories = [
   }
 
   .category-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--mr-space-1);
-    padding: var(--mr-space-5);
-    background: var(--mr-bg-surface);
-    border: 1px solid var(--mr-border);
-    border-radius: var(--mr-radius-lg);
-    transition: border-color var(--mr-duration-fast) var(--mr-ease-out),
-                transform var(--mr-duration-fast) var(--mr-ease-out);
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    transition: transform var(--mr-duration-fast) var(--mr-ease-out);
   }
 
   .category-card:hover {
     text-decoration: none;
-    border-color: var(--mr-border-strong);
     transform: translateY(-2px);
   }
 
@@ -139,11 +148,14 @@ const categories = [
   }
 
   .category-name {
+    display: block;
     font-weight: 600;
     color: var(--mr-text-primary);
   }
 
   .category-count {
+    display: block;
+    margin-top: var(--mr-space-1);
     font-size: var(--mr-text-sm);
     color: var(--mr-text-muted);
   }
@@ -167,13 +179,6 @@ const categories = [
     padding: 0;
     display: grid;
     gap: var(--mr-space-4);
-  }
-
-  .why-list li {
-    padding: var(--mr-space-4);
-    background: var(--mr-bg-surface);
-    border: 1px solid var(--mr-border);
-    border-radius: var(--mr-radius-md);
     color: var(--mr-text-secondary);
   }
 
@@ -200,14 +205,7 @@ const categories = [
     }
   }
 
-  .a11y-code pre {
-    padding: var(--mr-space-5);
-    background: var(--mr-bg-surface);
-    border: 1px solid var(--mr-border);
-    border-radius: var(--mr-radius-lg);
-    overflow-x: auto;
-    font-family: var(--mr-font-mono);
-    font-size: var(--mr-text-sm);
-    color: var(--mr-accent-light);
+  .a11y-code {
+    min-width: 0;
   }
 </style>

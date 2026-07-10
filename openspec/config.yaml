@@ -1,0 +1,51 @@
+schema: spec-driven
+
+context: |
+  Project: Motion Recipes — a statically-generated catalog of browser-native
+  web animation patterns. Each "recipe" ships a live demo, its source code, and
+  a step-by-step implementation guide.
+
+  Tech stack:
+    - Astro 7 (static output, `format: 'directory'`), TypeScript strict
+    - Tailwind CSS v4 via @tailwindcss/vite; design tokens are `--mr-*` CSS
+      variables in src/styles/tokens.css, aliased into Tailwind `@theme` in
+      src/styles/global.css. Prefer token-backed utilities over raw values.
+    - @andersseen/web-components (`and-*`, Stencil/Shadow DOM) for site chrome
+      (e.g. and-navbar), @andersseen/layout for attribute-driven layout,
+      @andersseen/icon for icons. Array props are set via JS, not attributes.
+    - Vitest (jsdom) for unit tests, Playwright for e2e smoke tests.
+
+  Animation philosophy (non-negotiable):
+    - Browser-native only: CSS animations, WAAPI, View Transitions, scroll-driven
+      animations, IntersectionObserver. No animation runtime dependencies.
+    - Animate compositor-friendly properties (transform, opacity, filter).
+    - Three-tier progressive enhancement for every recipe:
+        1. Modern CSS/API path (feature-detected with CSS.supports / 'in' checks)
+        2. JS fallback for unsupported browsers
+        3. prefers-reduced-motion path, checked FIRST, that shows final state
+           immediately with no motion.
+
+  Recipe anatomy (one slug spans all of these — keep them in sync):
+    - src/recipes/<slug>/{source.html,source.css,source.ts,recipe.md} — the
+      teaching copy shown on the page (raw-imported).
+    - src/scripts/<slug>.ts — the runtime module the live demo imports; exports
+      init<Name>(container: HTMLElement): () => void (returns cleanup). Reuse
+      prefersReducedMotion() from src/scripts/reduced-motion.ts.
+    - src/components/demos/<Name>Demo.astro — the live demo (scoped styles use
+      --mr-* tokens).
+    - src/data/recipes.ts (Recipe) and src/data/recipe-details.ts
+      (RecipeDetails) entries; register the demo in demoMap in
+      src/pages/recipes/[slug].astro.
+    - Data integrity is enforced by src/data/recipes.test.ts.
+
+  Conventions:
+    - Reference the /native-css-animation-recipe skill when adding a recipe.
+    - Dev server runs in background: `astro dev --background`
+      (manage with `astro dev stop|status|logs`).
+
+rules:
+  proposal:
+    - State which of the three enhancement tiers (modern / fallback / reduced-motion) the change touches.
+  tasks:
+    - Keep recipe file-set changes in sync (recipes.ts, recipe-details.ts, demoMap, scripts, demo component, recipes/<slug>/*).
+    - Include a task to run `pnpm test` and `pnpm check` before done.

@@ -7,12 +7,23 @@ const { notes } = Astro.props;
 ---
 
 <section class="notes-section" aria-labelledby="a11y-title">
-  <h2 id="a11y-title" class="section-heading">Accessibility notes</h2>
-  <ul class="notes-list">
-    {notes.map((note) => (
-      <li>{note}</li>
-    ))}
-  </ul>
+  <and-card variant="outline" padded>
+    <and-card-header>
+      <and-card-title>
+        <span class="notes-title">
+          <and-icon name="accessibility" size="18"></and-icon>
+          Accessibility notes
+        </span>
+      </and-card-title>
+    </and-card-header>
+    <and-card-content>
+      <ul class="notes-list" id="a11y-title">
+        {notes.map((note) => (
+          <li>{note}</li>
+        ))}
+      </ul>
+    </and-card-content>
+  </and-card>
 </section>
 
 <style>
@@ -20,16 +31,18 @@ const { notes } = Astro.props;
     margin-top: var(--mr-space-12);
   }
 
-  .section-heading {
-    font-size: var(--mr-text-lg);
-    font-weight: 600;
-    margin-bottom: var(--mr-space-5);
+  .notes-title {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--mr-space-2);
+    color: var(--mr-accent-light);
   }
 
   .notes-list {
     padding-left: var(--mr-space-5);
     color: var(--mr-text-secondary);
     line-height: 1.7;
+    margin: 0;
   }
 
   .notes-list li {

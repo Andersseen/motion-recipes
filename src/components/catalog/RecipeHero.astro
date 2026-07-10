@@ -1,4 +1,5 @@
 ---
+const base = import.meta.env.BASE_URL;
 ---
 
 <section class="recipe-hero" aria-labelledby="hero-title">
@@ -13,8 +14,20 @@
       and step-by-step implementation recipes.
     </p>
     <div class="hero-actions">
-      <a href="/recipes/" class="hero-button hero-button-primary">Explore recipes</a>
-      <a href="https://github.com/andersseen/motion-recipes" class="hero-button hero-button-secondary">View source</a>
+      <and-button variant="default" size="lg" href={`${base}recipes/`}>
+        Explore recipes
+        <and-icon slot="end" name="arrow-right" size="18"></and-icon>
+      </and-button>
+      <and-button
+        variant="outline"
+        size="lg"
+        href="https://github.com/andersseen/motion-recipes"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <and-icon slot="start" name="github" size="18"></and-icon>
+        View source
+      </and-button>
     </div>
   </div>
 </section>
@@ -22,7 +35,7 @@
 <style>
   .recipe-hero {
     position: relative;
-    padding-block: var(--mr-space-24) var(--mr-space-16);
+    padding-block: clamp(4rem, 8vw, 6rem);
     overflow: hidden;
     background: var(--mr-gradient-hero);
   }
@@ -31,13 +44,13 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139, 92, 246, 0.12), transparent);
+    background: radial-gradient(ellipse 55% 34% at 50% 0%, rgba(139, 92, 246, 0.08), transparent 72%);
   }
 
   .hero-content {
     position: relative;
     text-align: center;
-    max-width: 800px;
+    max-width: 760px;
   }
 
   .hero-eyebrow {
@@ -51,19 +64,19 @@
   }
 
   .hero-title {
-    font-size: var(--mr-text-3xl);
+    font-size: clamp(3rem, 6vw, 4.5rem);
     font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 1.05;
-    margin-bottom: var(--mr-space-6);
+    margin-bottom: var(--mr-space-5);
   }
 
   .hero-subtitle {
-    font-size: var(--mr-text-lg);
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
     color: var(--mr-text-secondary);
     max-width: 64ch;
     margin-inline: auto;
-    margin-bottom: var(--mr-space-10);
+    margin-bottom: var(--mr-space-8);
   }
 
   .hero-actions {
@@ -72,49 +85,5 @@
     align-items: center;
     justify-content: center;
     gap: var(--mr-space-4);
-  }
-
-  .hero-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--mr-space-3) var(--mr-space-6);
-    font-size: var(--mr-text-base);
-    font-weight: 500;
-    border-radius: var(--mr-radius-full);
-    transition: transform var(--mr-duration-fast) var(--mr-ease-out),
-                box-shadow var(--mr-duration-fast) var(--mr-ease-out);
-  }
-
-  .hero-button:hover {
-    text-decoration: none;
-    transform: translateY(-2px);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero-button:hover {
-      transform: none;
-    }
-  }
-
-  .hero-button-primary {
-    color: white;
-    background: linear-gradient(135deg, var(--mr-accent), var(--mr-accent-light));
-    box-shadow: 0 8px 24px rgba(139, 92, 242, 0.3);
-  }
-
-  .hero-button-primary:hover {
-    box-shadow: 0 12px 32px rgba(139, 92, 242, 0.4);
-  }
-
-  .hero-button-secondary {
-    color: var(--mr-text-primary);
-    background: var(--mr-bg-surface);
-    border: 1px solid var(--mr-border-strong);
-  }
-
-  .hero-button-secondary:hover {
-    border-color: var(--mr-border-strong);
-    background: var(--mr-bg-elevated);
   }
 </style>

@@ -1,4 +1,60 @@
+@import 'tailwindcss';
 @import './tokens.css';
+
+/* Scan @andersseen/* web components so Tailwind generates the utility classes
+   they emit on their host elements (bg-card, border-border, p-4, shadow-lg, …).
+   Tailwind v4 does not scan node_modules by default. */
+@source "../../node_modules/@andersseen/web-components/dist";
+
+@theme {
+  /* ── Design-system semantic palette ──────────────────────────────────────
+     Maps the indigo-rose HSL tokens onto Tailwind color utilities. These drive
+     the @andersseen/* components (bg-card, bg-primary, border-border, …) AND
+     any site chrome that wants the same palette. */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-success: hsl(var(--success));
+  --color-warning: hsl(var(--warning));
+  --color-info: hsl(var(--info));
+
+  /* ── Site-specific tokens (bespoke chrome + demos) ───────────────────────
+     Distinct names so they never collide with the semantic palette above. */
+  --color-bg: var(--mr-bg);
+  --color-bg-elevated: var(--mr-bg-elevated);
+  --color-bg-surface: var(--mr-bg-surface);
+  --color-bg-glass: var(--mr-bg-glass);
+  --color-fg: var(--mr-text-primary);
+  --color-fg-secondary: var(--mr-text-secondary);
+  --color-fg-muted: var(--mr-text-muted);
+  --color-border-strong: var(--mr-border-strong);
+  --color-accent-light: var(--mr-accent-light);
+
+  --radius-sm: var(--mr-radius-sm);
+  --radius-md: var(--mr-radius-md);
+  --radius-lg: var(--mr-radius-lg);
+  --radius-xl: var(--mr-radius-xl);
+  --radius-full: var(--mr-radius-full);
+
+  --font-sans: var(--mr-font-sans);
+  --font-mono: var(--mr-font-mono);
+}
 
 *,
 *::before,
@@ -12,13 +68,6 @@
 
 html {
   color-scheme: dark;
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
 }
 
 body {
@@ -90,71 +139,40 @@ button {
   border: 0;
 }
 
-/* Layout utilities */
+/* Layout utilities — composed from Tailwind primitives via @apply */
 .mr-container {
-  width: min(100% - var(--mr-space-8), var(--mr-max-width));
-  margin-inline: auto;
+  @apply mx-auto w-[min(100%-var(--mr-space-8),var(--mr-max-width))];
 }
 
 .mr-section {
-  padding-block: var(--mr-space-16);
+  @apply py-16;
 }
 
 .mr-section-title {
-  font-size: var(--mr-text-xl);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  margin-bottom: var(--mr-space-6);
+  @apply mb-6 font-semibold tracking-[-0.02em] text-[length:var(--mr-text-xl)];
 }
 
 .mr-section-subtitle {
-  color: var(--mr-text-secondary);
-  font-size: var(--mr-text-base);
-  max-width: 60ch;
-  margin-bottom: var(--mr-space-10);
+  @apply text-fg-secondary mb-10 max-w-[60ch] text-[length:var(--mr-text-base)];
 }
 
 .mr-surface {
-  background: var(--mr-bg-surface);
-  border: 1px solid var(--mr-border);
-  border-radius: var(--mr-radius-lg);
+  @apply bg-bg-surface border-border rounded-lg border;
 }
 
 .mr-glass {
-  background: var(--mr-bg-glass);
-  border: 1px solid var(--mr-border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  @apply bg-bg-glass border-border border backdrop-blur-[16px];
 }
 
 .mr-gradient-text {
-  background: linear-gradient(135deg, var(--mr-text-primary) 0%, var(--mr-accent-light) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
+  @apply bg-clip-text text-transparent bg-[linear-gradient(135deg,var(--mr-text-primary)_0%,var(--mr-accent-light)_100%)];
   -webkit-text-fill-color: transparent;
 }
 
 .mr-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--mr-space-2);
-  padding: var(--mr-space-1) var(--mr-space-3);
-  font-size: var(--mr-text-xs);
-  font-weight: 500;
-  border-radius: var(--mr-radius-full);
-  border: 1px solid var(--mr-border);
-  color: var(--mr-text-secondary);
-  background: var(--mr-bg-elevated);
+  @apply text-fg-secondary bg-bg-elevated border-border inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[length:var(--mr-text-xs)] font-medium;
 }
 
 .mr-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--mr-space-1) var(--mr-space-2);
-  font-size: var(--mr-text-xs);
-  font-weight: 500;
-  border-radius: var(--mr-radius-sm);
-  background: rgba(139, 92, 246, 0.12);
-  color: var(--mr-accent-light);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  @apply text-accent-light inline-flex items-center rounded-sm border bg-[rgba(139,92,246,0.12)] border-[rgba(139,92,246,0.2)] px-2 py-1 text-[length:var(--mr-text-xs)] font-medium;
 }
