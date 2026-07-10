@@ -15,6 +15,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@andersseen/icon": "^0.0.3",
+    "@andersseen/layout": "^0.0.1",
+    "@andersseen/web-components": "^0.1.0",
     "astro": "^7.0.6",
     "marked": "^15.0.0"
   },

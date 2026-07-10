@@ -2,6 +2,10 @@
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import '../../styles/global.css';
+import '@andersseen/layout/dist/layout.css';
+import '@andersseen/web-components/dist/web-components/web-components.css';
+import '@andersseen/web-components/themes/styles/default.css';
+import '@andersseen/web-components/themes/colors/indigo-rose.css';
 
 export interface Props {
   title: string;
@@ -13,7 +17,7 @@ const pageTitle = title === 'Motion Recipes' ? title : `${title} · Motion Recip
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-mode="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -31,6 +35,14 @@ const pageTitle = title === 'Motion Recipes' ? title : `${title} · Motion Recip
       </main>
       <Footer />
     </div>
+    <script>
+      import '@andersseen/web-components/components/all';
+      import { registerIcons, COMPONENT_ICONS } from '@andersseen/icon';
+      import { enableAnimations } from '@andersseen/web-components';
+
+      registerIcons(COMPONENT_ICONS);
+      enableAnimations();
+    </script>
   </body>
 </html>
 
