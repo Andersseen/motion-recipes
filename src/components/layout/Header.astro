@@ -2,42 +2,117 @@
 const base = import.meta.env.BASE_URL;
 const navItems = [
   { id: 'recipes', label: 'Recipes', href: `${base}recipes/` },
-  { id: 'about', label: 'About', href: `${base}#about` },
+  { id: 'about', label: 'About', href: `${base}about/` },
 ];
 
-const activeItem = Astro.url.pathname.startsWith(`${base}recipes`) ? 'recipes' : '';
+const activeItem = Astro.url.pathname.startsWith(`${base}recipes`)
+  ? 'recipes'
+  : Astro.url.pathname.startsWith(`${base}about`)
+    ? 'about'
+    : '';
 ---
 
-<and-navbar
-  id="main-nav"
-  variant="glass"
-  position="sticky"
-  item-variant="default"
-  active-item={activeItem}
-  aria-label="Primary"
->
-  <a
-    slot="brand"
-    href={base}
-    class="text-fg inline-flex items-center gap-3 font-semibold no-underline hover:no-underline text-[length:var(--mr-text-lg)]"
-    aria-label="Motion Recipes home"
-  >
-    <span
-      class="h-7 w-7 rounded-md bg-[linear-gradient(135deg,var(--mr-accent),var(--mr-accent-light))] shadow-[0_0_16px_var(--mr-accent-glow)]"
-      aria-hidden="true"
-    ></span>
-    <span>Motion Recipes</span>
-  </a>
-</and-navbar>
+<header class="site-header">
+  <nav class="mr-container site-nav" aria-label="Primary">
+    <a href={base} class="brand" aria-label="Motion Recipes home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>Motion Recipes</span>
+    </a>
 
-<script is:inline define:vars={{ navItems, activeItem }}>
-  customElements.whenDefined('and-navbar').then(() => {
-    const nav = document.getElementById('main-nav');
-    nav.items = navItems;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        nav.activeItem = activeItem;
-      });
-    });
-  });
-</script>
+    <ul class="nav-list" role="list">
+      {navItems.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class:list={['nav-link', { active: activeItem === item.id }]}
+            aria-current={activeItem === item.id ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    z-index: 20;
+    top: 0;
+    border-bottom: 1px solid var(--mr-border);
+    background: rgba(10, 10, 11, 0.88);
+    backdrop-filter: blur(16px);
+  }
+
+  .site-nav {
+    min-height: var(--mr-header-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--mr-space-6);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--mr-space-3);
+    color: var(--mr-text-primary);
+    font-size: var(--mr-text-lg);
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .brand:hover {
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: none;
+    border-radius: var(--mr-radius-sm);
+    background: linear-gradient(135deg, var(--mr-accent), var(--mr-accent-light));
+    box-shadow: 0 0 16px var(--mr-accent-glow);
+  }
+
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: var(--mr-space-1);
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav-link {
+    display: block;
+    padding: var(--mr-space-2) var(--mr-space-3);
+    border-radius: var(--mr-radius-sm);
+    color: var(--mr-text-secondary);
+    font-size: var(--mr-text-sm);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .nav-link:hover {
+    color: var(--mr-text-primary);
+    background: rgba(255, 255, 255, 0.05);
+    text-decoration: none;
+  }
+
+  .nav-link.active {
+    color: var(--mr-accent-light);
+    background: rgba(139, 92, 246, 0.16);
+    box-shadow: inset 0 -2px 0 var(--mr-accent);
+  }
+
+  @media (max-width: 520px) {
+    .brand {
+      font-size: 0;
+    }
+
+    .nav-link {
+      font-size: 0.875rem;
+    }
+  }
+</style>

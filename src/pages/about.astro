@@ -1,0 +1,194 @@
+---
+import SiteLayout from '../components/layout/SiteLayout.astro';
+
+const principles = [
+  {
+    title: 'Browser native',
+    body: 'Every recipe favors modern CSS, Web Animations and DOM APIs over heavy runtime dependencies.',
+  },
+  {
+    title: 'Accessible by default',
+    body: 'Examples preserve keyboard navigation, document reduced-motion behavior and include practical fallbacks.',
+  },
+  {
+    title: 'Built to learn from',
+    body: 'Live demos sit beside focused source code and an implementation guide you can adapt to your own stack.',
+  },
+];
+---
+
+<SiteLayout
+  title="About"
+  description="Learn what Motion Recipes is, how the examples are built and how to use the catalog."
+>
+  <header class="about-hero">
+    <div class="mr-container about-intro">
+      <p class="about-eyebrow">Project notes</p>
+      <h1>About Motion Recipes</h1>
+      <p class="about-lead">
+        Motion Recipes is a small, practical reference for building polished web animation without
+        turning motion into a dependency or an accessibility problem.
+      </p>
+    </div>
+  </header>
+
+  <div class="about-content">
+    <div class="mr-container about-layout">
+      <section aria-labelledby="purpose-title">
+        <h2 id="purpose-title">What you will find here</h2>
+        <p>
+          Each entry combines a working demo, the relevant HTML, CSS and TypeScript, browser support
+          notes, performance guidance and a step-by-step recipe. The examples are framework-agnostic
+          so you can use the underlying technique in any application.
+        </p>
+      </section>
+
+      <section aria-labelledby="principles-title">
+        <h2 id="principles-title">Project principles</h2>
+        <ul class="principle-grid" role="list">
+          {principles.map((principle) => (
+            <li>
+              <h3>{principle.title}</h3>
+              <p>{principle.body}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="use-section" aria-labelledby="use-title">
+        <div>
+          <h2 id="use-title">How to use the catalog</h2>
+          <p>
+            Start with the live interaction, check its reduced-motion behavior, then copy only the
+            pieces your interface needs. Treat timings and distances as a baseline and tune them to
+            the surrounding product rather than preserving the demo verbatim.
+          </p>
+        </div>
+        <div class="stack-note">
+          <span>Built with</span>
+          <strong>Astro · TypeScript · Modern CSS · Vanilla Web APIs</strong>
+        </div>
+      </section>
+    </div>
+  </div>
+</SiteLayout>
+
+<style>
+  .about-hero {
+    padding-block: clamp(4rem, 8vw, 6.5rem);
+    border-bottom: 1px solid var(--mr-border);
+    background: radial-gradient(ellipse 55% 55% at 50% 0%, rgba(139, 92, 246, 0.12), transparent 75%);
+  }
+
+  .about-intro {
+    max-width: var(--mr-content-width);
+  }
+
+  .about-eyebrow {
+    margin-bottom: var(--mr-space-4);
+    color: var(--mr-accent-light);
+    font-size: var(--mr-text-sm);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin-bottom: var(--mr-space-6);
+    font-size: clamp(2.75rem, 6vw, 4.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  .about-lead {
+    color: var(--mr-text-secondary);
+    font-size: var(--mr-text-lg);
+    line-height: 1.65;
+  }
+
+  .about-content {
+    padding-block: clamp(4rem, 8vw, 7rem);
+  }
+
+  .about-layout {
+    display: grid;
+    gap: var(--mr-space-20);
+    max-width: 960px;
+  }
+
+  section > h2,
+  .use-section h2 {
+    margin-bottom: var(--mr-space-5);
+    font-size: var(--mr-text-xl);
+    letter-spacing: -0.025em;
+  }
+
+  section > p,
+  .use-section p {
+    max-width: 68ch;
+    color: var(--mr-text-secondary);
+  }
+
+  .principle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--mr-space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .principle-grid li,
+  .stack-note {
+    padding: var(--mr-space-6);
+    border: 1px solid var(--mr-border);
+    border-radius: var(--mr-radius-lg);
+    background: var(--mr-gradient-card);
+  }
+
+  .principle-grid h3 {
+    margin-bottom: var(--mr-space-3);
+    font-size: var(--mr-text-base);
+  }
+
+  .principle-grid p {
+    color: var(--mr-text-secondary);
+    font-size: var(--mr-text-sm);
+  }
+
+  .use-section {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+    gap: var(--mr-space-8);
+    align-items: start;
+  }
+
+  .stack-note {
+    display: grid;
+    gap: var(--mr-space-2);
+  }
+
+  .stack-note span {
+    color: var(--mr-text-muted);
+    font-size: var(--mr-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .stack-note strong {
+    color: var(--mr-accent-light);
+    font-size: var(--mr-text-sm);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 720px) {
+    .principle-grid,
+    .use-section {
+      grid-template-columns: 1fr;
+    }
+
+    .about-layout {
+      gap: var(--mr-space-16);
+    }
+  }
+</style>
