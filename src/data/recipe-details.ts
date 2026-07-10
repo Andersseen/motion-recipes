@@ -365,6 +365,67 @@ export const recipeDetails: RecipeDetails[] = [
       },
     ],
   },
+  {
+    slug: "theme-water-drop",
+    whatItDoes:
+      "Switches a theme by revealing the new colors through an expanding clip-path circle that starts at the click point, then warps the freshly revealed surface with an SVG turbulence filter so it ripples and settles like a drop landing in water.",
+    whenToUse: [
+      "Light/dark or palette toggles where the change should feel delightful.",
+      "Hero sections or showcase cards that reward interaction.",
+      "Onboarding or settings where a themed preview sells the choice.",
+      "Any deliberate, user-initiated switch that can afford ~0.8s of motion.",
+    ],
+    whenToAvoid: [
+      "High-frequency toggles where the animation would get in the way.",
+      "Performance-critical views on low-end devices (the filter is GPU work).",
+      "When the change must be instant or is triggered programmatically in bulk.",
+      "When reduced motion is on — fall back to an instant swap.",
+    ],
+    howItWorks: `
+1. **Name the scene** — give the themable container a \`view-transition-name\` so it is captured as its own snapshot.
+2. **Swap inside a transition** — call \`document.startViewTransition\` and flip the theme (a \`data-mode\` attribute driving CSS custom properties).
+3. **Reveal with a circle** — on \`transition.ready\`, animate \`clip-path\` on \`::view-transition-new(scene)\` from \`circle(0)\` at the click point out to the farthest corner. Coordinates are relative to the scene box, not the viewport.
+4. **Ripple the water** — apply an SVG \`feTurbulence\` + \`feDisplacementMap\` filter to the new snapshot and animate the displacement \`scale\` down to zero so the surface warps then settles.
+5. **Disable the default fade** — set \`animation: none\` on the scene's (and root's) view-transition pseudo-elements so only the clip reveal shows.
+6. **Fallback** — swap instantly when View Transitions are unsupported or reduced motion is requested.
+    `.trim(),
+    accessibilityNotes: [
+      "Drive the toggle from a real <button> with aria-pressed reflecting state.",
+      "Keyboard activation reveals from the scene's center, so no pointer is required.",
+      "Respect prefers-reduced-motion by swapping the theme with no animation.",
+      "Ensure both palettes meet contrast requirements — the motion is decorative.",
+      "Keep focus on the toggle after activation; the transition never moves focus.",
+    ],
+    performanceNotes: [
+      "The whole scene snapshot is displaced by the SVG filter each frame — keep the scene modestly sized and the effect short (~760ms).",
+      "Animate only clip-path (compositable) via WAAPI; let SMIL drive the filter.",
+      "Scope the transition with a single view-transition-name to limit capture cost.",
+      "Guard against starting a new transition while one is still running.",
+      "The filter is a one-shot on a deliberate action, not a continuous animation.",
+    ],
+    browserSupport: [
+      {
+        name: "document.startViewTransition",
+        support: "Chrome 111+, Edge 111+, Safari 18+",
+        fallback: "Instant theme swap with no reveal.",
+      },
+      {
+        name: "clip-path circle() on view-transition pseudo",
+        support: "Same as startViewTransition",
+        fallback: "New theme still applies without the circular reveal.",
+      },
+      {
+        name: "SVG feTurbulence / feDisplacementMap",
+        support: "All modern browsers (SMIL beginElement in Chrome, Safari)",
+        fallback: "Clip-path reveal plays without the water wobble.",
+      },
+      {
+        name: "prefers-reduced-motion",
+        support: "All modern browsers",
+        fallback: "Disable the reveal and the ripple entirely.",
+      },
+    ],
+  },
 ];
 
 export function getRecipeDetailsBySlug(slug: string): RecipeDetails | undefined {

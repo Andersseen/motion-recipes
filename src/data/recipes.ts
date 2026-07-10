@@ -122,6 +122,28 @@ export const recipes: Recipe[] = [
       ts: "/recipes/text-reveal/source.ts",
     },
   },
+  {
+    slug: "theme-water-drop",
+    title: "Liquid Theme Switch",
+    description:
+      "Reveal a new theme with a clip-path circle spreading from the click, then ripple the surface with an SVG turbulence filter like a drop hitting water.",
+    category: "view-transitions",
+    difficulty: "advanced",
+    APIs: [
+      "document.startViewTransition",
+      "clip-path",
+      "WAAPI",
+      "SVG feTurbulence / feDisplacementMap",
+      "prefers-reduced-motion",
+    ],
+    hasReducedMotion: true,
+    hasFallback: true,
+    sourceFiles: {
+      html: "/recipes/theme-water-drop/source.html",
+      css: "/recipes/theme-water-drop/source.css",
+      ts: "/recipes/theme-water-drop/source.ts",
+    },
+  },
 ];
 
 export function getRecipeBySlug(slug: string): Recipe | undefined {

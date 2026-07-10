@@ -16,6 +16,7 @@ import ViewTransitionTabsDemo from '../../components/demos/ViewTransitionTabsDem
 import MagneticButtonDemo from '../../components/demos/MagneticButtonDemo.astro';
 import SpotlightCardDemo from '../../components/demos/SpotlightCardDemo.astro';
 import TextRevealDemo from '../../components/demos/TextRevealDemo.astro';
+import ThemeWaterDropDemo from '../../components/demos/ThemeWaterDropDemo.astro';
 
 export function getStaticPaths() {
   return recipes.map((recipe) => ({ params: { slug: recipe.slug } }));
@@ -36,6 +37,7 @@ const demoMap: Record<string, typeof CardToModalDemo> = {
   'magnetic-button': MagneticButtonDemo,
   'spotlight-card': SpotlightCardDemo,
   'text-reveal': TextRevealDemo,
+  'theme-water-drop': ThemeWaterDropDemo,
 };
 
 const DemoComponent = demoMap[slug] ?? CardToModalDemo;

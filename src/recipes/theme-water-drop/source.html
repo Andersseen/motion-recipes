@@ -1,0 +1,25 @@
+<div class="scene" data-scene data-mode="day">
+  <h2 class="scene-title">Liquid theme</h2>
+  <p class="scene-text">Tap the drop and watch the new theme ripple across the surface.</p>
+  <div class="scene-swatches">
+    <span class="swatch swatch--a"></span>
+    <span class="swatch swatch--b"></span>
+    <span class="swatch swatch--c"></span>
+  </div>
+</div>
+
+<button type="button" class="drop-toggle" data-toggle aria-pressed="false">Drop</button>
+
+<!-- Water surface: turbulence displaces the revealed snapshot, then settles. -->
+<svg width="0" height="0" aria-hidden="true">
+  <filter id="liquid" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.02 0.03" numOctaves="2" seed="4" result="noise">
+      <animate data-turbulence attributeName="baseFrequency" dur="760ms"
+        values="0.05 0.07;0.02 0.03;0.012 0.02" keyTimes="0;0.5;1" fill="freeze" begin="indefinite" />
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G">
+      <animate data-displace attributeName="scale" dur="760ms" values="34;0" keyTimes="0;1"
+        calcMode="spline" keySplines="0.22 1 0.36 1" fill="freeze" begin="indefinite" />
+    </feDisplacementMap>
+  </filter>
+</svg>

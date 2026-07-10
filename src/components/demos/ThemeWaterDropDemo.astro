@@ -1,0 +1,295 @@
+---
+---
+
+<div class="wd-demo" data-theme-water-drop>
+  <div class="wd-scene" data-wd-scene data-mode="day">
+    <div class="wd-window">
+      <div class="wd-titlebar">
+        <span class="wd-tdot"></span>
+        <span class="wd-tdot"></span>
+        <span class="wd-tdot"></span>
+      </div>
+
+      <div class="wd-content">
+        <div class="wd-header">
+          <div class="wd-avatar"></div>
+          <div class="wd-meta">
+            <span class="wd-bar wd-bar--title"></span>
+            <span class="wd-bar wd-bar--sub"></span>
+          </div>
+        </div>
+
+        <div class="wd-swatches">
+          <span class="wd-swatch wd-swatch--a"></span>
+          <span class="wd-swatch wd-swatch--b"></span>
+          <span class="wd-swatch wd-swatch--c"></span>
+          <span class="wd-swatch wd-swatch--d"></span>
+        </div>
+
+        <div class="wd-card">
+          <span class="wd-bar wd-bar--line"></span>
+          <span class="wd-bar wd-bar--line wd-bar--short"></span>
+          <span class="wd-pill">Get started</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="wd-toggle" data-wd-toggle aria-pressed="false">
+    <span class="wd-drop" aria-hidden="true"></span>
+    <span class="wd-toggle-label">Drop</span>
+  </button>
+
+  <!-- Water surface filter: turbulence + displacement, animated on each drop. -->
+  <svg class="wd-defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="wd-liquid" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.03" numOctaves="2" seed="4" result="wd-noise">
+        <animate
+          data-wd-turbulence
+          attributeName="baseFrequency"
+          dur="760ms"
+          values="0.05 0.07;0.02 0.03;0.012 0.02"
+          keyTimes="0;0.5;1"
+          fill="freeze"
+          begin="indefinite"
+        ></animate>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="wd-noise" scale="0" xChannelSelector="R" yChannelSelector="G">
+        <animate
+          data-wd-displace
+          attributeName="scale"
+          dur="760ms"
+          values="34;0"
+          keyTimes="0;1"
+          calcMode="spline"
+          keySplines="0.22 1 0.36 1"
+          fill="freeze"
+          begin="indefinite"
+        ></animate>
+      </feDisplacementMap>
+    </filter>
+  </svg>
+</div>
+
+<script>
+  import { initThemeWaterDrop } from '../../scripts/theme-water-drop';
+
+  const demos = document.querySelectorAll<HTMLElement>('[data-theme-water-drop]');
+  demos.forEach((demo) => initThemeWaterDrop(demo));
+</script>
+
+<!-- View Transition pseudo-elements can't be Astro-scoped: keep them global. -->
+<style is:global>
+  .wd-scene {
+    view-transition-name: wd-scene;
+  }
+
+  /* Reveal the new theme purely with the clip-path circle (no cross-fade). */
+  ::view-transition-old(wd-scene),
+  ::view-transition-new(wd-scene) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(wd-scene) {
+    z-index: 0;
+  }
+
+  ::view-transition-new(wd-scene) {
+    z-index: 1;
+    /* Water surface wobble driven by the SVG turbulence animation. */
+    filter: url(#wd-liquid);
+  }
+
+  /* The unchanged rest of the page must not cross-fade. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(wd-scene),
+    ::view-transition-old(wd-scene),
+    ::view-transition-new(wd-scene) {
+      animation: none !important;
+    }
+  }
+</style>
+
+<style>
+  .wd-demo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--mr-space-6);
+  }
+
+  .wd-scene {
+    /* Day palette (default). */
+    --wd-bg: #f2ece1;
+    --wd-surface: #ffffff;
+    --wd-fg: #1c1917;
+    --wd-muted: #a8a29e;
+    --wd-accent: #0ea5e9;
+    --wd-accent-2: #f59e0b;
+    --wd-ring: rgba(14, 165, 233, 0.28);
+
+    width: min(100%, 320px);
+    border-radius: var(--mr-radius-xl);
+    background: var(--wd-bg);
+    box-shadow: var(--mr-shadow-lg);
+    overflow: hidden;
+    /* Rounded corners must clip the expanding reveal too. */
+    isolation: isolate;
+  }
+
+  .wd-scene[data-mode='night'] {
+    /* Night palette. */
+    --wd-bg: #0b1220;
+    --wd-surface: #131d31;
+    --wd-fg: #eaf1ff;
+    --wd-muted: #64748b;
+    --wd-accent: #38bdf8;
+    --wd-accent-2: #a78bfa;
+    --wd-ring: rgba(56, 189, 248, 0.3);
+  }
+
+  .wd-window {
+    padding: var(--mr-space-3);
+  }
+
+  .wd-titlebar {
+    display: flex;
+    gap: 0.4rem;
+    padding: var(--mr-space-2) var(--mr-space-2) var(--mr-space-4);
+  }
+
+  .wd-tdot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: var(--mr-radius-full);
+    background: var(--wd-muted);
+    opacity: 0.6;
+  }
+
+  .wd-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mr-space-5);
+    padding: var(--mr-space-4);
+    background: var(--wd-surface);
+    border-radius: var(--mr-radius-lg);
+  }
+
+  .wd-header {
+    display: flex;
+    align-items: center;
+    gap: var(--mr-space-3);
+  }
+
+  .wd-avatar {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--mr-radius-full);
+    background: linear-gradient(135deg, var(--wd-accent), var(--wd-accent-2));
+    flex-shrink: 0;
+  }
+
+  .wd-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .wd-bar {
+    display: block;
+    height: 0.65rem;
+    border-radius: var(--mr-radius-full);
+    background: var(--wd-fg);
+    opacity: 0.14;
+  }
+
+  .wd-bar--title {
+    width: 62%;
+    opacity: 0.28;
+  }
+
+  .wd-bar--sub {
+    width: 40%;
+  }
+
+  .wd-swatches {
+    display: flex;
+    gap: var(--mr-space-2);
+  }
+
+  .wd-swatch {
+    flex: 1;
+    height: 2.25rem;
+    border-radius: var(--mr-radius-md);
+  }
+
+  .wd-swatch--a { background: var(--wd-accent); }
+  .wd-swatch--b { background: var(--wd-accent-2); }
+  .wd-swatch--c { background: color-mix(in oklab, var(--wd-accent) 55%, var(--wd-surface)); }
+  .wd-swatch--d { background: color-mix(in oklab, var(--wd-accent-2) 55%, var(--wd-surface)); }
+
+  .wd-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mr-space-3);
+    padding: var(--mr-space-4);
+    border-radius: var(--mr-radius-md);
+    background: var(--wd-bg);
+  }
+
+  .wd-bar--line { width: 88%; }
+  .wd-bar--short { width: 56%; }
+
+  .wd-pill {
+    align-self: flex-start;
+    margin-top: var(--mr-space-1);
+    padding: 0.45rem 1rem;
+    font-size: var(--mr-text-sm);
+    font-weight: 600;
+    color: #ffffff;
+    background: var(--wd-accent);
+    border-radius: var(--mr-radius-full);
+  }
+
+  .wd-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--mr-space-2);
+    padding: var(--mr-space-2) var(--mr-space-5);
+    font-size: var(--mr-text-sm);
+    font-weight: 600;
+    color: var(--mr-text-primary);
+    background: var(--mr-bg-surface);
+    border: 1px solid var(--mr-border-strong);
+    border-radius: var(--mr-radius-full);
+    cursor: pointer;
+    transition:
+      transform var(--mr-duration-fast) var(--mr-ease-out),
+      border-color var(--mr-duration-fast) var(--mr-ease-out);
+  }
+
+  .wd-toggle:hover {
+    transform: translateY(-1px);
+    border-color: var(--mr-accent);
+  }
+
+  .wd-toggle:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .wd-drop {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 0 var(--mr-radius-full) var(--mr-radius-full) var(--mr-radius-full);
+    background: linear-gradient(135deg, var(--mr-accent-light), var(--mr-accent));
+    transform: rotate(45deg);
+    box-shadow: 0 0 12px var(--mr-accent-glow);
+  }
+</style>
