@@ -7,6 +7,7 @@ import { recipes } from '../data/recipes';
 const featuredSlugs = new Set(['card-to-modal', 'scroll-reveal', 'view-transition-tabs']);
 const featured = recipes.filter((r) => featuredSlugs.has(r.slug));
 const latest = [...recipes].reverse();
+const base = import.meta.env.BASE_URL;
 
 const categories = [
   { id: 'shared-element', label: 'Shared Element', count: recipes.filter((r) => r.category === 'shared-element').length },
@@ -57,7 +58,7 @@ const reducedMotionSnippet = `@media (prefers-reduced-motion: reduce) {
       <ul class="category-grid" role="list">
         {categories.map((cat) => (
           <li>
-            <a href={`/recipes/?category=${cat.id}`} class="category-card">
+            <a href={`${base}recipes/?category=${cat.id}`} class="category-card">
               <and-card variant="outline" padded>
                 <span class="category-name">{cat.label}</span>
                 <span class="category-count">{cat.count} recipe{cat.count === 1 ? '' : 's'}</span>

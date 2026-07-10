@@ -12,6 +12,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "validate": "pnpm check && pnpm test && pnpm test:e2e && pnpm build",
+    "deploy": "gh workflow run deploy.yml --ref main",
     "astro": "astro",
     "test": "vitest run",
     "test:watch": "vitest",

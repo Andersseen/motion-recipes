@@ -7,7 +7,7 @@ test('home page loads and renders the navbar without console errors', async ({ p
     if (msg.type() === 'error') errors.push(msg.text());
   });
 
-  const response = await page.goto('/');
+  const response = await page.goto('./');
   expect(response?.status()).toBe(200);
 
   await expect(page.locator('and-navbar')).toBeVisible();

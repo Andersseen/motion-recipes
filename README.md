@@ -52,6 +52,11 @@ A visual catalog of browser-native UI animation patterns with live demos, source
 | `pnpm build`   | Build your production site to `./dist/`     |
 | `pnpm preview` | Preview your build locally                  |
 | `pnpm check`   | Run Astro type checks                       |
+| `pnpm validate`| Run checks, unit tests, E2E tests and build |
+| `pnpm deploy`  | Trigger the GitHub Pages workflow on `main` |
+
+`pnpm deploy` requires the [GitHub CLI](https://cli.github.com/) to be installed and authenticated.
+Commit and push local changes first: the command deploys the current remote `main` branch.
 
 ## Philosophy
 

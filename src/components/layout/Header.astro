@@ -1,10 +1,11 @@
 ---
+const base = import.meta.env.BASE_URL;
 const navItems = [
-  { id: 'recipes', label: 'Recipes', href: '/recipes/' },
-  { id: 'about', label: 'About', href: '/#about' },
+  { id: 'recipes', label: 'Recipes', href: `${base}recipes/` },
+  { id: 'about', label: 'About', href: `${base}#about` },
 ];
 
-const activeItem = Astro.url.pathname.startsWith('/recipes') ? 'recipes' : '';
+const activeItem = Astro.url.pathname.startsWith(`${base}recipes`) ? 'recipes' : '';
 ---
 
 <and-navbar
@@ -17,7 +18,7 @@ const activeItem = Astro.url.pathname.startsWith('/recipes') ? 'recipes' : '';
 >
   <a
     slot="brand"
-    href="/"
+    href={base}
     class="text-fg inline-flex items-center gap-3 font-semibold no-underline hover:no-underline text-[length:var(--mr-text-lg)]"
     aria-label="Motion Recipes home"
   >

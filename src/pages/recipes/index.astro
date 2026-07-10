@@ -59,6 +59,7 @@ const categories: { id: RecipeCategory | 'all'; label: string }[] = [
 </SiteLayout>
 
 <script>
+  const base = import.meta.env.BASE_URL;
   const filterBar = document.querySelector<HTMLElement>('[data-filter-bar]');
   const grid = document.querySelector('.recipe-grid');
   const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
@@ -78,7 +79,7 @@ const categories: { id: RecipeCategory | 'all'; label: string }[] = [
 
       links.forEach((link) => {
         const href = link.getAttribute('href') ?? '';
-        const slug = href.replace('/recipes/', '').replace('/', '');
+        const slug = href.replace(`${base}recipes/`, '').replace('/', '');
         const category = recipeMeta?.[slug]?.category ?? '';
         const isMatch = activeId === 'all' || category === activeId;
         link.closest('li')!.hidden = !isMatch;

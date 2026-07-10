@@ -1,13 +1,17 @@
 import { defineConfig } from '@playwright/test';
 
+const nodeProcess = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process;
+const port = Number(nodeProcess?.env?.E2E_PORT ?? 4321);
+const origin = `http://localhost:${port}`;
+
 export default defineConfig({
   testDir: './e2e',
   webServer: {
-    command: 'pnpm dev',
-    url: 'http://localhost:4321',
+    command: `pnpm build && pnpm preview --host 127.0.0.1 --port ${port}`,
+    url: `${origin}/motion-recipes/`,
     reuseExistingServer: true,
   },
   use: {
-    baseURL: 'http://localhost:4321',
+    baseURL: `${origin}/motion-recipes/`,
   },
 });

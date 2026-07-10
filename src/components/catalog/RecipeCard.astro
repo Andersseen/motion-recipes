@@ -6,6 +6,7 @@ export interface Props {
 }
 
 const { recipe } = Astro.props;
+const base = import.meta.env.BASE_URL;
 
 const difficultyColor = {
   beginner: '#22c55e',
@@ -24,7 +25,7 @@ const categoryLabels: Record<Recipe['category'], string> = {
 };
 ---
 
-<a href={`/recipes/${recipe.slug}/`} class="card-link" aria-label={`View ${recipe.title} recipe`}>
+<a href={`${base}recipes/${recipe.slug}/`} class="card-link" aria-label={`View ${recipe.title} recipe`}>
   <and-card variant="elevated" padded>
     <and-card-header>
       <div class="card-header-row">

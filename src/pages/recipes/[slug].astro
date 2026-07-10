@@ -57,6 +57,7 @@ const html = sourceFiles[`../../recipes/${slug}/source.html`] ?? '';
 const css = sourceFiles[`../../recipes/${slug}/source.css`] ?? '';
 const ts = sourceFiles[`../../recipes/${slug}/source.ts`] ?? '';
 const recipeMarkdown = recipeFiles[`../../recipes/${slug}/recipe.md`] ?? '';
+const base = import.meta.env.BASE_URL;
 
 const categoryLabels: Record<typeof recipe.category, string> = {
   'shared-element': 'Shared Element',
@@ -74,8 +75,8 @@ const categoryLabels: Record<typeof recipe.category, string> = {
     <header class="recipe-header">
       <div class="mr-container header-inner">
         <and-breadcrumb nav-label="Breadcrumb">
-          <and-breadcrumb-item href="/">Home</and-breadcrumb-item>
-          <and-breadcrumb-item href="/recipes/">Recipes</and-breadcrumb-item>
+          <and-breadcrumb-item href={base}>Home</and-breadcrumb-item>
+          <and-breadcrumb-item href={`${base}recipes/`}>Recipes</and-breadcrumb-item>
           <and-breadcrumb-item current>{recipe.title}</and-breadcrumb-item>
         </and-breadcrumb>
         <and-badge variant="secondary" class="header-category">{categoryLabels[recipe.category]}</and-badge>

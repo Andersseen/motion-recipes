@@ -4,7 +4,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://motion-recipes.example.com',
+  site: 'https://andersseen.github.io',
+  base: '/motion-recipes/',
   compressHTML: true,
   build: {
     format: 'directory'
