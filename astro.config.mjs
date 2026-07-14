@@ -2,12 +2,10 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
-const isGitHubPages = Reflect.get(globalThis, 'process')?.env?.GITHUB_ACTIONS === 'true';
-
+// Deployed to Cloudflare Pages, which serves at the domain root — base is '/'.
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://andersseen.github.io',
-  base: isGitHubPages ? '/motion-recipes/' : '/',
+  site: 'https://motion-recipes.pages.dev',
   compressHTML: true,
   build: {
     format: 'directory'

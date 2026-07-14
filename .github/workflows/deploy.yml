@@ -7,13 +7,11 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: pages-${{ github.ref }}
+  group: cloudflare-pages-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
   quality:
@@ -52,25 +50,33 @@ jobs:
       - name: Build site
         run: pnpm build
 
-      - name: Configure GitHub Pages
+      - name: Upload build artifact
         if: github.event_name != 'pull_request'
-        uses: actions/configure-pages@v5
-
-      - name: Upload GitHub Pages artifact
-        if: github.event_name != 'pull_request'
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
+          name: dist
           path: dist
+          retention-days: 1
 
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy to Cloudflare Pages
     if: github.event_name != 'pull_request'
     needs: quality
     runs-on: ubuntu-latest
     environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      name: cloudflare-pages
+      url: ${{ steps.deploy.outputs.deployment-url }}
     steps:
-      - name: Deploy artifact
-        id: deployment
-        uses: actions/deploy-pages@v5
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=motion-recipes --branch=main

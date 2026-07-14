@@ -13,7 +13,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "validate": "pnpm check && pnpm test && pnpm test:e2e && pnpm build",
-    "deploy": "gh workflow run deploy.yml --ref main",
+    "deploy": "pnpm build && wrangler pages deploy",
+    "deploy:preview": "pnpm build && wrangler pages deploy --branch preview",
     "astro": "astro",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -33,6 +34,7 @@
     "jsdom": "^29.1.1",
     "tailwindcss": "^4.3.2",
     "typescript": "^5.7.0",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wrangler": "^4.110.0"
   }
 }

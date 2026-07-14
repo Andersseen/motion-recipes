@@ -7,7 +7,8 @@ const port = Number(nodeProcess?.env?.E2E_PORT ?? 4321);
 // which makes the readiness check flaky/slow.
 const host = '127.0.0.1';
 const origin = `http://${host}:${port}`;
-const basePath = nodeProcess?.env?.GITHUB_ACTIONS === 'true' ? '/motion-recipes/' : '/';
+// Cloudflare Pages serves at the domain root, so the site's base is always '/'.
+const basePath = '/';
 
 export default defineConfig({
   testDir: './e2e',
